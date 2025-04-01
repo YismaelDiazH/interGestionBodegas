@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { AnimatePresence } from "framer-motion"; // Agrega esta línea
 import './App.css';
 import BodegaGestion from './components/AdminSede/AgregarBodega'
+import VistaBodega from "./components/AdminSede/VistaBodegas";
+import VistaCliente from "./components/AdminSede/ListaClientes";
+import AgregarCliente from "./components/AdminSede/AgregarCliente";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -17,6 +20,9 @@ const AnimatedRoutes = () => {
         {/* Sedes Admin WIP */}
         <Route path="/sedes">
           <Route path="gestion" element={<BodegaGestion />} />
+          <Route path="gestioncliente" element={<AgregarCliente />} />
+          <Route path="vistabodega" element={<VistaBodega />} />
+          <Route path="vistacliente" element={<VistaCliente />} />
         </Route>
       </Routes>
     </AnimatePresence>

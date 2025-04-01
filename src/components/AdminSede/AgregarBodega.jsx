@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, LogOut } from "lucide-react";
+import Swal from "sweetalert2";
 
 const BodegaGestion = () => {
   const [folio, setFolio] = useState("");
@@ -9,8 +10,24 @@ const BodegaGestion = () => {
 
   const isFormValid = () => folio && precio && tamano && vacante;
 
+  const handleSubmit = () => {
+    if (isFormValid()) {
+      Swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "Los datos se han guardado correctamente",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Algo falló, por favor verifica los datos",
+      });
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen w-screen bg-white overflow-hidden">
+    <div className="flex flex-col min-h-screen w-full bg-white overflow-hidden">
       <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full shadow-md fixed top-0 left-0 z-50">
         <div className="text-lg font-bold">LOGO</div>
         <div className="space-x-4 flex">
@@ -19,7 +36,7 @@ const BodegaGestion = () => {
         </div>
       </nav>
 
-      <div className="flex flex-col items-center justify-center flex-1 w-full min-h-screen bg-white pt-20 px-4 md:px-6">
+      <div className="flex flex-col items-center justify-center flex-grow w-full min-h-screen bg-white pt-24 px-4 md:px-6">
         <div className="w-full max-w-lg bg-white p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
           <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">Gestión de Bodegas</h1>
 
@@ -66,6 +83,7 @@ const BodegaGestion = () => {
           <button
             className={`w-full p-3 rounded-lg transition-all duration-300 ${isFormValid() ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
             disabled={!isFormValid()}
+            onClick={handleSubmit}
           >
             Aceptar
           </button>
