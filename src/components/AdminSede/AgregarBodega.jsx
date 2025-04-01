@@ -7,14 +7,11 @@ const BodegaGestion = () => {
   const [tamano, setTamano] = useState("");
   const [vacante, setVacante] = useState("");
 
-  // Función para validar si todos los campos están completos
-  const isFormValid = () => {
-    return folio !== "" && precio !== "" && tamano !== "" && vacante !== "";
-  };
+  const isFormValid = () => folio && precio && tamano && vacante;
 
   return (
-    <div className="flex flex-col h-screen bg-white">
-      <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full fixed top-0 left-0 z-50">
+    <div className="flex flex-col min-h-screen w-screen bg-white overflow-hidden">
+      <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full shadow-md fixed top-0 left-0 z-50">
         <div className="text-lg font-bold">LOGO</div>
         <div className="space-x-4 flex">
           <Menu className="cursor-pointer" />
@@ -22,13 +19,11 @@ const BodegaGestion = () => {
         </div>
       </nav>
 
-      <div className="flex-1 p-10 pt-24">
-        <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">Gestión de Bodegas</h1>
+      <div className="flex flex-col items-center justify-center flex-1 w-full min-h-screen bg-white pt-20 px-4 md:px-6">
+        <div className="w-full max-w-lg bg-white p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
+          <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">Gestión de Bodegas</h1>
 
-        
-        <div className="max-w-lg w-full mx-auto bg-white p-6 rounded-lg shadow-lg">
-          <div className="grid grid-cols-2 gap-6 mb-4">
-            
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-4">
             <input
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
               placeholder="Folio"
@@ -44,8 +39,7 @@ const BodegaGestion = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-6 mb-4">
-            {/* Segundo par de selects */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-4">
             <select
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
               value={tamano}
@@ -69,9 +63,8 @@ const BodegaGestion = () => {
             </select>
           </div>
 
-          {/* Botón Aceptar */}
           <button
-            className={`w-full p-3 rounded-lg hover:bg-orange-600 focus:outline-none mt-4 ${isFormValid() ? 'bg-orange-500 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+            className={`w-full p-3 rounded-lg transition-all duration-300 ${isFormValid() ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
             disabled={!isFormValid()}
           >
             Aceptar
