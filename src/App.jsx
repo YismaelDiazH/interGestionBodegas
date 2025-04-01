@@ -1,31 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Sidebar from './components/ui/Sidebar'
-import { LifeBuoy, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings } from 'lucide-react'
-import './App.css'
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion"; // Agrega esta línea
+import './App.css';
+import BodegaGestion from './components/AdminSede/AgregarBodega'
 
-function App() {
-  
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">  {/* Asegúrate de que AnimatePresence esté envuelto alrededor de Routes */}
+      <Routes location={location} key={location.pathname}>
+        {/* Autentificacion 
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />*/}
+
+        {/* Sedes Admin WIP */}
+        <Route path="/sedes">
+          <Route path="gestion" element={<BodegaGestion />} />
+        </Route>
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
+function Home() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("")
+      .then((response) => {
+        setData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError("Error al obtener los datos: " + error.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-   <main>
-    <Sidebar>
-      <SidebarItem icon={<LayoutDashboard/>} text="Dashboard" alert/>
-      <SidebarItem icon={<BarChart3 size={20}/>} text="Statistics" active/>
-      <SidebarItem icon={<UserCircle size={20}/>} text="Users"/>
-      <SidebarItem icon={<Boxes size={20}/>} text="Inventory"/>
-      <SidebarItem icon={<Package size={20}/>} text="Inventory"/>
-      <SidebarItem icon={<Receipt size={20}/>} text="Billings"/>
-      <hr className='my-3' />
-      <SidebarItem icon={<Settings size={20}/>} text="Settings"/>
-      <SidebarItem icon={<LifeBuoy size={20}/>} text="help"/>
-      
-      
-      
-    </Sidebar>
-   </main>
-  )
+    <div>
+      <h1>Datos de la API desde Django</h1>
+      <ul>
+        {data.map((item) => (
+          <li key={item.id}>{JSON.stringify(item)}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+function App() {
+  const userRole = "admin"; 
+  return (
+    <Router>
+      <div className="container mt-4">
+        <div className="row">
+          <div className="col">
+            <AnimatedRoutes />
+          </div>
+        </div>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
