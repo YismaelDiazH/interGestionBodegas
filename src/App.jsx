@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+
 import { AnimatePresence } from "framer-motion"; // Agrega esta línea
-import './App.css';
-import BodegaGestion from './components/AdminSede/AgregarBodega'
+import "./App.css";
+import BodegaGestion from "./components/AdminSede/AgregarBodega";
 import VistaBodega from "./components/AdminSede/VistaBodegas";
 import VistaCliente from "./components/AdminSede/ListaClientes";
 import AgregarCliente from "./components/AdminSede/AgregarCliente";
@@ -11,7 +17,9 @@ import AgregarCliente from "./components/AdminSede/AgregarCliente";
 const AnimatedRoutes = () => {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">  {/* Asegúrate de que AnimatePresence esté envuelto alrededor de Routes */}
+    <AnimatePresence mode="wait">
+      {" "}
+      {/* Asegúrate de que AnimatePresence esté envuelto alrededor de Routes */}
       <Routes location={location} key={location.pathname}>
         {/* Autentificacion 
         <Route path="/login" element={<Login />} />
@@ -68,7 +76,7 @@ function Home() {
 }
 
 function App() {
-  const userRole = "admin"; 
+  const userRole = "admin";
   return (
     <Router>
       <div className="container mt-4">
