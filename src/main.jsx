@@ -6,10 +6,12 @@ import "./index.css";
 
 /* import MainView from "./components/MainPage/MainView.jsx"; */
 import LoginView from "./components/Login/LoginView.jsx";
+/*import RegistrationView from "./components/Registration/RegistrationView.jsx";  */
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     {/*   <MainView />  */}
     <LoginView />
+    {/* <RegistrationView />   */}
   </StrictMode>
 );

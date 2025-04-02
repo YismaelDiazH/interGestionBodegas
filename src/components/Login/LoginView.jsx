@@ -11,7 +11,6 @@ const images = [
   "https://irp.cdn-website.com/9873f9dd/MOBILE/png/896.png",
   "https://irp.cdn-website.com/c78ea348/MOBILE/png/975.png",
   "https://cdn.pixabay.com/photo/2018/06/25/23/06/winery-3498194_1280.png",
-  "https://www.vhv.rs/dpng/d/503-5030169_warehouse-vector-png-warehouse-png-transparent-png.png",
 ];
 
 export default function LoginView() {
