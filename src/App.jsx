@@ -1,31 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Sidebar from './components/ui/Sidebar'
-import { LifeBuoy, Receipt, Boxes, Package, UserCircle, BarChart3, LayoutDashboard, Settings } from 'lucide-react'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React from "react";
+import AdminRoutes from "./routes/AdminRoutes"; // AdminRoutes se encargará de manejar todo lo relacionado a la sección admin
+import Sidebar from "./components/admin/Sidebar"; // Sidebar de administración
+import "./App.css";
 
 function App() {
-  
-
   return (
-   <main>
-    <Sidebar>
-      <SidebarItem icon={<LayoutDashboard/>} text="Dashboard" alert/>
-      <SidebarItem icon={<BarChart3 size={20}/>} text="Statistics" active/>
-      <SidebarItem icon={<UserCircle size={20}/>} text="Users"/>
-      <SidebarItem icon={<Boxes size={20}/>} text="Inventory"/>
-      <SidebarItem icon={<Package size={20}/>} text="Inventory"/>
-      <SidebarItem icon={<Receipt size={20}/>} text="Billings"/>
-      <hr className='my-3' />
-      <SidebarItem icon={<Settings size={20}/>} text="Settings"/>
-      <SidebarItem icon={<LifeBuoy size={20}/>} text="help"/>
-      
-      
-      
-    </Sidebar>
-   </main>
-  )
+    <Router>
+      <MainLayout />
+    </Router>
+  );
 }
 
-export default App
+const MainLayout = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin"); // Detecta si la ruta es una ruta de administración
+
+  return (
+    <div className="flex">
+      {/* Mostrar Sidebar solo en las rutas de administración */}
+      {isAdminRoute && <Sidebar />}
+
+      {/* Contenedor de rutas */}
+      <div className="flex-1 p-4">
+        <Routes>
+          <Route path="/admin/*" element={<AdminRoutes />} />
+          {/* Otras rutas del sistema podrían ir aquí */}
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+export default App;
