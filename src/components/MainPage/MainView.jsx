@@ -5,8 +5,6 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Route, Routes } from "react-router-dom"; // Importa Route y Routes
-import LoginView from "../Login/LoginView.jsx";
 import blur from "./img/blur.png";
 import camera from "./img/camera.png";
 import clean from "./img/clean.png";
@@ -35,20 +33,11 @@ export default function MainView() {
         {/* Menú en pantallas grandes */}
         <nav className="hidden md:flex space-x-4">
           <a href="#" className="hover:underline">
-            Inicio
+            Iniciar sesión
           </a>
-          <nav>
-            <Link to="/login" className="hover:underline">
-              Iniciar Sesión
-            </Link>
-          </nav>
 
           {/* Definir las rutas dentro del componente */}
-          <Routes>
-            <Route path="/login" element={<LoginView />} />{" "}
-            {/* Ruta para la vista de Login */}
-            {/* Agrega otras rutas aquí si las tienes */}
-          </Routes>
+
           <a href="#" className="hover:underline">
             Contacto
           </a>
