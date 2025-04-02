@@ -37,7 +37,9 @@ const AgregarCliente = () => {
 
       <div className="flex flex-col items-center justify-center flex-grow w-full min-h-screen bg-white pt-24 px-4 md:px-6">
         <div className="w-full max-w-lg bg-white p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
-          <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">Agregar Cliente</h1>
+          <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">
+            Agregar Cliente
+          </h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-4">
             <input
@@ -68,7 +70,11 @@ const AgregarCliente = () => {
           </div>
 
           <button
-            className={`w-full p-3 rounded-lg transition-all duration-300 ${isFormValid() ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+            className={`w-full p-3 rounded-lg transition-all duration-300 ${
+              isFormValid()
+                ? "bg-orange-500 hover:bg-orange-600 text-white"
+                : "bg-gray-400 text-gray-700 cursor-not-allowed"
+            }`}
             disabled={!isFormValid()}
             onClick={handleSubmit}
           >
