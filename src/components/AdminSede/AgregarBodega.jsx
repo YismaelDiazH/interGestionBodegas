@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Menu, LogOut } from "lucide-react";
+import { X, Menu } from "lucide-react";
 import Swal from "sweetalert2";
 
-const BodegaGestion = () => {
+export default function BodegaGestion() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [folio, setFolio] = useState("");
   const [precio, setPrecio] = useState("");
   const [tamano, setTamano] = useState("");
@@ -27,28 +28,63 @@ const BodegaGestion = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-white overflow-hidden">
-      <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full shadow-md fixed top-0 left-0 z-50">
-        <div className="text-lg font-bold">LOGO</div>
-        <div className="space-x-4 flex">
-          <Menu className="cursor-pointer" />
-          <LogOut className="cursor-pointer" />
+    <div className="w-full font-sans bg-black text-white min-h-screen">
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
+        <h1 className="font-bold text-lg">BODEGAS SIGEBO</h1>
+        <nav className="hidden md:flex space-x-4">
+          <a href="#" className="hover:underline">
+            Iniciar sesión
+          </a>
+          <a href="#" className="hover:underline">
+            Contacto
+          </a>
+        </nav>
+        <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+          <Menu size={28} />
+        </button>
+        {/* Menú móvil */}
+        <div
+          className={`fixed top-0 right-0 h-full w-64 bg-black p-6 shadow-lg transform ${
+            menuOpen ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}
+        >
+          <button
+            className="absolute top-4 right-4"
+            onClick={() => setMenuOpen(false)}
+          >
+            <X size={28} />
+          </button>
+          <nav className="mt-10 flex flex-col space-y-4">
+            <a href="#" className="hover:underline">
+              Inicio
+            </a>
+            <a href="#" className="hover:underline">
+              Iniciar Sesión
+            </a>
+            <a href="#" className="hover:underline">
+              Contacto
+            </a>
+          </nav>
         </div>
-      </nav>
+      </header>
 
-      <div className="flex flex-col items-center justify-center flex-grow w-full min-h-screen bg-white pt-24 px-4 md:px-6">
-        <div className="w-full max-w-lg bg-white p-6 md:p-8 rounded-lg shadow-lg border border-gray-200">
-          <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">Gestión de Bodegas</h1>
+      {/* Formulario */}
+      <main className="pt-28 px-4 md:px-8 flex justify-center items-center min-h-screen bg-black">
+        <div className="bg-white text-black w-full max-w-2xl p-8 rounded-xl shadow-lg">
+          <h2 className="text-center text-3xl font-bold text-orange-500 mb-6">
+            Gestión de Bodegas
+          </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <input
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
               placeholder="Folio"
               value={folio}
               onChange={(e) => setFolio(e.target.value)}
             />
             <input
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
               placeholder="Precio"
               type="number"
               value={precio}
@@ -56,9 +92,9 @@ const BodegaGestion = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <select
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
               value={tamano}
               onChange={(e) => setTamano(e.target.value)}
             >
@@ -67,9 +103,8 @@ const BodegaGestion = () => {
               <option value="mediano">Mediano</option>
               <option value="grande">Grande</option>
             </select>
-
             <select
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none text-gray-800"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:outline-none"
               value={vacante}
               onChange={(e) => setVacante(e.target.value)}
             >
@@ -81,16 +116,18 @@ const BodegaGestion = () => {
           </div>
 
           <button
-            className={`w-full p-3 rounded-lg transition-all duration-300 ${isFormValid() ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+            className={`w-full p-3 text-lg rounded-lg transition-all duration-300 ${
+              isFormValid()
+                ? "bg-orange-500 hover:bg-orange-600 text-white"
+                : "bg-gray-400 text-gray-700 cursor-not-allowed"
+            }`}
             disabled={!isFormValid()}
             onClick={handleSubmit}
           >
             Aceptar
           </button>
         </div>
-      </div>
+      </main>
     </div>
   );
-};
-
-export default BodegaGestion;
+}
