@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SedesList = ({ sedes, onDelete }) => {
+  const [sedeToDelete, setSedeToDelete] = useState(null);
   const navigate = useNavigate();
+
+  // Manejo de la eliminación de sede
+  const handleDeleteClick = (id) => {
+    setSedeToDelete(id);
+    document.getElementById('my_modal_2').showModal(); // Abre el modal
+  };
+
+  const handleDeleteConfirm = () => {
+    onDelete(sedeToDelete); // Llama la función onDelete pasada como props
+    setSedeToDelete(null);
+    document.getElementById('my_modal_2').close(); // Cierra el modal
+  };
+
+  const handleDeleteCancel = () => {
+    setSedeToDelete(null);
+    document.getElementById('my_modal_2').close(); // Cierra el modal
+  };
 
   return (
     <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 p-4">
@@ -12,6 +30,7 @@ const SedesList = ({ sedes, onDelete }) => {
             <th>#</th>
             <th>Nombre de la Sede</th>
             <th>Ubicación</th>
+            <th>Administrador</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -20,8 +39,9 @@ const SedesList = ({ sedes, onDelete }) => {
             sedes.map((sede, index) => (
               <tr key={sede.id} className="hover">
                 <th>{index + 1}</th>
-                <td>{sede.nombre}</td>
-                <td>{sede.ubicacion}</td>
+                <td>{sede.name}</td>
+                <td>{sede.location}</td>
+                <td>{sede.administrator}</td>
                 <td>
                   {/* Botón Editar */}
                   <button
@@ -34,7 +54,7 @@ const SedesList = ({ sedes, onDelete }) => {
                   {/* Botón Eliminar */}
                   <button
                     className="btn btn-sm btn-outline btn-error"
-                    onClick={() => onDelete(sede.id)}
+                    onClick={() => handleDeleteClick(sede.id)}
                   >
                     Eliminar
                   </button>
@@ -50,6 +70,17 @@ const SedesList = ({ sedes, onDelete }) => {
           )}
         </tbody>
       </table>
+
+      {/* Modal de confirmación de eliminación */}
+      <dialog id="my_modal_2" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">¿Estás seguro de eliminar esta sede?</h3>
+          <div className="py-4">
+            <button className="btn btn-sm btn-outline btn-danger mr-2" onClick={handleDeleteConfirm}>Confirmar</button>
+            <button className="btn btn-sm btn-outline btn-secondary" onClick={handleDeleteCancel}>Cancelar</button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

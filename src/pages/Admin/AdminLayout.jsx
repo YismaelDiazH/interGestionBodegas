@@ -8,7 +8,7 @@ const AdminLayout = () => {
     <div className="flex h-screen bg-base-100">
       {/* Sidebar visible solo cuando estamos en una ruta de /admin */}
     
-      
+      <Sidebar /> {/* Sidebar de administración */}
       {/* Contenedor principal */}
       <div className="flex-1 flex flex-col">
         {/* Navbar visible solo dentro del panel admin */}

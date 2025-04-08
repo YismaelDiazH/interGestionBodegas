@@ -6,12 +6,12 @@ const SedeForm = ({ onSubmit, sedes }) => {
   const { id } = useParams();
   const isEditing = id !== undefined;
 
-  const initialState = { nombre: "", ubicacion: "" };
+  const initialState = { name: "", location: "", administrator: "" };
   const [formData, setFormData] = useState(initialState);
 
   // Si es edición, cargar los datos de la sede
   useEffect(() => {
-    if (isEditing) {
+    if (isEditing && sedes) {
       const sedeToEdit = sedes.find((sede) => sede.id === parseInt(id));
       if (sedeToEdit) {
         setFormData(sedeToEdit);
@@ -63,7 +63,7 @@ const SedeForm = ({ onSubmit, sedes }) => {
           minLength="3"
           maxLength="50"
           title="Solo letras y espacios, entre 3 y 50 caracteres"
-          value={formData.nombre}
+          value={formData.name}
           onChange={handleChange}
         />
       </label>
@@ -97,11 +97,45 @@ const SedeForm = ({ onSubmit, sedes }) => {
           minLength="5"
           maxLength="100"
           title="Debe tener entre 5 y 100 caracteres"
-          value={formData.ubicacion}
+          value={formData.location}
           onChange={handleChange}
         />
       </label>
       <p className="validator-hint">Ingrese la ubicación de la sede.</p>
+
+      {/* Administrador de la Sede */}
+      <label className="input validator mb-4">
+        <svg
+          className="h-[1em] opacity-50"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <g
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            strokeWidth="2.5"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path d="M12 2a10 10 0 1 1-7.07 2.93A10 10 0 0 1 12 2z"></path>
+            <path d="M12 6v6h6"></path>
+          </g>
+        </svg>
+        <input
+          type="text"
+          name="administrador"
+          required
+          placeholder="Administrador de la Sede"
+          minLength="3"
+          maxLength="50"
+          title="Solo letras y espacios, entre 3 y 50 caracteres"
+          value={formData.administrator}
+          onChange={handleChange}
+        />
+      </label>
+      <p className="validator-hint">
+        Debe tener entre 3 y 50 caracteres y solo contener letras.
+      </p>
 
       {/* Botón de Envío */}
       <button className="btn btn-primary btn-wide" type="submit">

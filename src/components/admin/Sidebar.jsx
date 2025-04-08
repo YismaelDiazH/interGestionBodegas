@@ -29,8 +29,8 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/admin/roles" className="flex items-center gap-2">
-            <MdSecurity size={24} /> {isOpen && "Roles"}
+          <Link to="/admin/administradores" className="flex items-center gap-2">
+            <MdSecurity size={24} /> {isOpen && "Administradores"}
           </Link>
         </li>
    
