@@ -1,96 +1,40 @@
-
-import { useState, useEffect } from "react";
-import axios from "axios";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
-
-import { AnimatePresence } from "framer-motion"; // Agrega esta línea
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import AdminRoutes from "./routes/AdminRoutes"; // Tu layout con Sidebar y todo
 import BodegaGestion from "./components/AdminSede/AgregarBodega";
 import VistaBodega from "./components/AdminSede/VistaBodegas";
 import VistaCliente from "./components/AdminSede/ListaClientes";
 import AgregarCliente from "./components/AdminSede/AgregarCliente";
-
-const AnimatedRoutes = () => {
-  const location = useLocation();
-  return (
-    <AnimatePresence mode="wait">
-      {" "}
-      {/* Asegúrate de que AnimatePresence esté envuelto alrededor de Routes */}
-      <Routes location={location} key={location.pathname}>
-        {/* Autentificacion 
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />*/}
-
-        {/* Sedes Admin WIP */}
-        <Route path="/sedes">
-          <Route path="gestion" element={<BodegaGestion />} />
-          <Route path="gestioncliente" element={<AgregarCliente />} />
-          <Route path="vistabodega" element={<VistaBodega />} />
-          <Route path="vistacliente" element={<VistaCliente />} />
-        </Route>
-      </Routes>
-    </AnimatePresence>
-  );
-};
-
-function Home() {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Error al obtener los datos: " + error.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  return (
-    <div>
-      <h1>Datos de la API desde Django</h1>
-      <ul>
-        {data.map((item) => (
-          <li key={item.id}>{JSON.stringify(item)}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+import "./App.css";
 
 function App() {
-  const userRole = "admin";
   return (
     <Router>
-      <div className="container mt-4">
-        <div className="row">
-          <div className="col">
-            <AnimatedRoutes />
-          </div>
-        </div>
-      </div>
-
+      <AllRoutes />
     </Router>
   );
 }
 
+const AllRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {/* Admin Panel con Sidebar y Navbar */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
+
+        {/* Sedes Admin rutas separadas */}
+        <Route path="/sedes/gestion" element={<BodegaGestion />} />
+        <Route path="/sedes/gestioncliente" element={<AgregarCliente />} />
+        <Route path="/sedes/vistabodega" element={<VistaBodega />} />
+        <Route path="/sedes/vistacliente" element={<VistaCliente />} />
+
+        {/* Página por defecto */}
+        <Route path="/" element={<div className="p-6">Bienvenido a la plataforma</div>} />
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 export default App;
