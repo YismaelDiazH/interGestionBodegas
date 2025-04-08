@@ -3,27 +3,27 @@ import { Menu, LogOut, Plus, Edit } from "lucide-react";
 import Swal from "sweetalert2";
 
 const VistaCliente = () => {
-  const [nombre, setNombre] = useState("");
-  const [email, setEmail] = useState("");
-  const [estado, setEstado] = useState("");
-
-  const isFormValid = () => nombre && email && estado;
-
-  const handleSubmit = () => {
-    if (isFormValid()) {
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: "Los datos se han guardado correctamente",
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Algo falló, por favor verifica los datos",
-      });
-    }
-  };
+  const [clientes, setClientes] = useState([
+    {
+      id: 1,
+      nombre: "Juan Pérez",
+      email: "juan@example.com",
+      estado: "Activo",
+      bodegas: [
+        { folio: "B1", estadoPago: "Pagado", tamano: "Mediana", edificio: "A" },
+        { folio: "B2", estadoPago: "No Pagado", tamano: "Grande", edificio: "B" },
+      ],
+    },
+    {
+      id: 2,
+      nombre: "María López",
+      email: "maria@example.com",
+      estado: "Inactivo",
+      bodegas: [
+        { folio: "B3", estadoPago: "Pagado", tamano: "Chica", edificio: "C" },
+      ],
+    },
+  ]);
 
   const handleNewCliente = () => {
     window.location.href = "/sedes/gestioncliente"; // Redirige directamente a la pantalla de nuevo cliente
@@ -59,32 +59,33 @@ const VistaCliente = () => {
                   <th className="p-3 border border-gray-300">Nombre</th>
                   <th className="p-3 border border-gray-300">Email</th>
                   <th className="p-3 border border-gray-300">Estado</th>
+                  <th className="p-3 border border-gray-300">Bodegas Rentadas</th>
                   <th className="p-3 border border-gray-300">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="text-gray-800 text-center">
-                  <td className="p-3 border border-gray-300">1</td>
-                  <td className="p-3 border border-gray-300">Juan Pérez</td>
-                  <td className="p-3 border border-gray-300">juan@example.com</td>
-                  <td className="p-3 border border-gray-300">Activo</td>
-                  <td className="p-3 border border-gray-300">
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center hover:bg-blue-600">
-                      <Edit className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
-                <tr className="text-gray-800 text-center">
-                  <td className="p-3 border border-gray-300">2</td>
-                  <td className="p-3 border border-gray-300">María López</td>
-                  <td className="p-3 border border-gray-300">maria@example.com</td>
-                  <td className="p-3 border border-gray-300">Inactivo</td>
-                  <td className="p-3 border border-gray-300">
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center hover:bg-blue-600">
-                      <Edit className="w-4 h-4" />
-                    </button>
-                  </td>
-                </tr>
+                {clientes.map((cliente) => (
+                  <tr key={cliente.id} className="text-gray-800 text-center">
+                    <td className="p-3 border border-gray-300">{cliente.id}</td>
+                    <td className="p-3 border border-gray-300">{cliente.nombre}</td>
+                    <td className="p-3 border border-gray-300">{cliente.email}</td>
+                    <td className="p-3 border border-gray-300">{cliente.estado}</td>
+                    <td className="p-3 border border-gray-300">
+                      <ul className="space-y-2">
+                        {cliente.bodegas.map((bodega, index) => (
+                          <li key={index}>
+                            <span>{`Folio: ${bodega.folio} - ${bodega.tamano} - ${bodega.edificio} - ${bodega.estadoPago}`}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td className="p-3 border border-gray-300">
+                      <button className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center hover:bg-blue-600">
+                        <Edit className="w-4 h-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
