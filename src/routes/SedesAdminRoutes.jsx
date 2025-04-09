@@ -5,6 +5,7 @@ import BodegaGestion from "../components/AdminSede/sede/AgregarBodega";
 import VistaBodega from "../components/AdminSede/sede/VistaBodegas";
 import VistaCliente from "../components/AdminSede/sede/ListaClientes";
 //import AgregarCliente from "../components/AdminSede/sede/AgregarCliente";
+//import DashboardAdministrador from "../components/AdminSede/Dashboard";
 
 const SedeAdminRoutes = () => {
   return (
