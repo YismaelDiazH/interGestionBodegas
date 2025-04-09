@@ -15,7 +15,6 @@ import AdminRoutes from "./routes/AdminRoutes";
 import MainView from "./components/MainPage/MainView";
 import LoginView from "./components/Login/LoginView";
 import RegistrationView from "./components/Registration/RegistrationView";
-
 import Password from "./components/Registration/Password";
 
 // Contexto (si lo tienes)
@@ -26,12 +25,6 @@ import "./App.css";
 
 // Simulación del rol actual (puedes cambiarlo según lógica real)
 const userRole = "sede"; // "admin" o "sede"
-
-import { ColorProvider } from "./context/ColorContext";
-import "./App.css";
-
-// Simulación del rol actual
-const userRole = "admin"; // o "sede"
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -59,12 +52,9 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
-    <ColorProvider>
-    
     <Router>
       <AnimatedRoutes />
     </Router>
-    </ColorProvider>
   );
 }
 

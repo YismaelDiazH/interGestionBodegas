@@ -6,9 +6,6 @@ import VistaBodega from "../components/AdminSede/sede/VistaBodegas";
 import VistaCliente from "../components/AdminSede/sede/ListaClientes";
 //import AgregarCliente from "../components/AdminSede/sede/AgregarCliente";
 //import DashboardAdministrador from "../components/AdminSede/Dashboard";
-import BodegaGestion from "../components/AdminSede/AgregarBodega";
-import VistaBodega from "../components/AdminSede/VistaBodegas";
-import VistaCliente from "../components/AdminSede/ListaClientes";
 import DashboardAdministrador from "../components/AdminSede/Dashboard";
 const SedeAdminRoutes = () => {
   return (
