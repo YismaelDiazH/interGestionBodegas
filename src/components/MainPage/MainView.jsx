@@ -32,13 +32,13 @@ export default function MainView() {
 
         {/* Menú en pantallas grandes */}
         <nav className="hidden md:flex space-x-4">
-          <a href="#" className="hover:underline">
+          <a href="/login" className="hover:underline">
             Iniciar sesión
           </a>
 
           {/* Definir las rutas dentro del componente */}
 
-          <a href="#" className="hover:underline">
+          <a href="#contact-link" className="hover:underline">
             Contacto
           </a>
         </nav>
@@ -262,14 +262,15 @@ export default function MainView() {
           <img
             src="https://cdn-icons-png.flaticon.com/512/174/174883.png"
             alt="Redes Sociales"
-            className="w-12 h-auto rounded-lg  "
+            className="w-12 h-auto rounded-lg"
           />
         </div>
 
-        <p className="text-lg font-semibold">
-          © 2025 Bodegas SIGEBO - Todos los derechos reservados.
-        </p>
-
+        <section id="contact-link">
+          <p className="text-lg font-semibold">
+            © 2025 Bodegas SIGEBO - Todos los derechos reservados.
+          </p>
+        </section>
         <div className="flex justify-center space-x-4 mt-4">
           <a href="#" className="hover:text-orange-500 transition"></a>
         </div>

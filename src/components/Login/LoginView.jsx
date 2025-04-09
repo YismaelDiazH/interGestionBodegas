@@ -38,7 +38,7 @@ export default function LoginView() {
           <div className="bg-white rounded-xl shadow-xl p-10 w-full">
             <img
               src={media}
-              alt="ChatMedia Logo"
+              alt="Logo"
               className="md:h-20 h-8 object-contain mx-auto mb-10"
             />
 
@@ -68,11 +68,11 @@ export default function LoginView() {
             </div>
           </div>
 
-          <div className="bg-white border rounded-md p-4 mt-4 w-full text-center shadow-sm text-sm text-gray-600">
+          <div className="bg-white rounded-md p-4 mt-4 w-full text-center shadow-sm text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
-            <button className="text-[#FF7700] hover:underline">
+            <a href="/register" className="text-[#FF7700] hover:underline">
               Regístrate
-            </button>
+            </a>
           </div>
         </div>
 
