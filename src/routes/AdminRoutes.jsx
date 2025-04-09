@@ -30,7 +30,7 @@ const AdminRoutes = () => {
           }
         />
         <Route path="administradores/new" element={<UserAdminForm />} />
-        <Route path="administradores/edit/:id" element={<UserAdminForm />} />
+        <Route path="administradores/edit/:id" element={<UserAdminForm  />} />
         {/* Reportes y Notificaciones */}+
       </Route>
     </Routes>
