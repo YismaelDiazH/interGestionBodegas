@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const SedeForm = ({ onSubmit, sedes }) => {
+const SedeForm = ({ sedes }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = id !== undefined;
 
-  const initialState = { name: "", location: "", administrator: "" };
+  const initialState = { nombre: "", direccion: "", administrador: "" };
   const [formData, setFormData] = useState(initialState);
 
-  // Si es edición, cargar los datos de la sede
   useEffect(() => {
     if (isEditing && sedes) {
       const sedeToEdit = sedes.find((sede) => sede.id === parseInt(id));
@@ -23,11 +22,33 @@ const SedeForm = ({ onSubmit, sedes }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Guardar sede
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
-    navigate("/admin/sedes");
+
+    const url = isEditing
+      ? `http://localhost:8080/api/sedes/${id}`
+      : "http://localhost:8080/api/sedes/";
+
+    const method = isEditing ? "PUT" : "POST";
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar la sede");
+      }
+
+      navigate("/admin/sedes");
+    } catch (error) {
+      console.error(error);
+      alert("Ocurrió un error al guardar la sede");
+    }
   };
 
   return (
@@ -63,7 +84,7 @@ const SedeForm = ({ onSubmit, sedes }) => {
           minLength="3"
           maxLength="50"
           title="Solo letras y espacios, entre 3 y 50 caracteres"
-          value={formData.name}
+          value={formData.nombre}
           onChange={handleChange}
         />
       </label>
@@ -91,13 +112,13 @@ const SedeForm = ({ onSubmit, sedes }) => {
         </svg>
         <input
           type="text"
-          name="ubicacion"
+          name="direccion"
           required
           placeholder="Ubicación de la Sede"
           minLength="5"
           maxLength="100"
           title="Debe tener entre 5 y 100 caracteres"
-          value={formData.location}
+          value={formData.direccion}
           onChange={handleChange}
         />
       </label>
@@ -126,10 +147,9 @@ const SedeForm = ({ onSubmit, sedes }) => {
           name="administrador"
           required
           placeholder="Administrador de la Sede"
-          minLength="3"
-          maxLength="50"
-          title="Solo letras y espacios, entre 3 y 50 caracteres"
-          value={formData.administrator}
+          pattern="[0-9]+"
+          title="Debe ser el ID del administrador"
+          value={formData.administrador}
           onChange={handleChange}
         />
       </label>
@@ -138,7 +158,7 @@ const SedeForm = ({ onSubmit, sedes }) => {
       </p>
 
       {/* Botón de Envío */}
-      <button className="btn btn-primary btn-wide" type="submit">
+      <button className="btn custom-bg btn-wide" type="submit">
         {isEditing ? "Guardar Cambios" : "Agregar Sede"}
       </button>
     </form>

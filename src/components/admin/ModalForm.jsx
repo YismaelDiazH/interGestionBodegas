@@ -14,7 +14,7 @@ export default function ModalForm({isOpen, onClose, mode, onSubmit}) {
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={onClose}>
               ✕
             </button>
-            <button className="btn btn-primary">
+            <button className="btn custom-bg">
                 {mode === 'edit' ? 'Guardar cambios' : 'Agregar'}
             </button>
           </form>

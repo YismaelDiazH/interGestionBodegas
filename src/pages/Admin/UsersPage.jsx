@@ -26,7 +26,7 @@ const UsersPage = () => {
 
       {/* Botón para agregar usuarios */}
       <button 
-        className="btn btn-primary btn-wide mb-4"
+        className="btn custom-bg btn-wide mb-4"
         onClick={() => navigate("new")}
       >
         Agregar Usuario

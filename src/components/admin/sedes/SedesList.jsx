@@ -39,9 +39,9 @@ const SedesList = ({ sedes, onDelete }) => {
             sedes.map((sede, index) => (
               <tr key={sede.id} className="hover">
                 <th>{index + 1}</th>
-                <td>{sede.name}</td>
-                <td>{sede.location}</td>
-                <td>{sede.administrator}</td>
+                <td>{sede.nombre}</td>
+                <td>{sede.direccion}</td>
+                <td>{sede.administrador}</td>
                 <td>
                   {/* Botón Editar */}
                   <button
