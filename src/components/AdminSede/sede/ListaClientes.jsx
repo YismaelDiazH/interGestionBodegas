@@ -26,7 +26,11 @@ const VistaCliente = () => {
   ]);
 
   const handleNewCliente = () => {
-    window.location.href = "/sedes/gestioncliente"; // Redirige directamente a la pantalla de nuevo cliente
+    window.location.href = "/sedes/gestioncliente";
+  };
+
+  const handleGoToAnotherPage = () => {
+    window.location.href = "/sedes/dashboard"; 
   };
 
   return (
@@ -90,6 +94,14 @@ const VistaCliente = () => {
             </table>
           </div>
         </div>
+
+        
+        <button
+          onClick={handleGoToAnotherPage}
+          className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+        >
+          Ir al menu de administración
+        </button>
       </div>
     </div>
   );

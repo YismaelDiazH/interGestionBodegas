@@ -126,6 +126,11 @@ const VistaBodega = () => {
     }
   };
 
+  
+  const handleGoToAnotherPage = () => {
+    window.location.href = "/sedes/dashboard"; 
+  };
+
   return (
     <div className="flex flex-col min-h-screen w-screen bg-white overflow-hidden">
       <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full shadow-md fixed top-0 left-0 z-50">
@@ -200,6 +205,13 @@ const VistaBodega = () => {
             </table>
           </div>
         </div>
+
+        <button
+          onClick={handleGoToAnotherPage}
+          className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+        >
+          Ir al menu principal
+        </button>
       </div>
 
       {modalOpen && selectedBodega && (
@@ -211,56 +223,50 @@ const VistaBodega = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            <h2 className="text-xl font-bold mb-4 text-green-500">Editar Bodega</h2>
+            <h2 className="text-xl font-bold mb-4 text-orange-500">Editar Bodega</h2>
 
             <div className="flex flex-col space-y-6">
-  <input
-    disabled
-    value={selectedBodega.id}
-    className="p-3 border-2 border-gray-300 rounded-lg bg-gray-200 text-black font-medium focus:outline-none"
-  />
-  <select
-    value={selectedBodega.tamano}
-    onChange={(e) => handleInputChange("tamano", e.target.value)}
-    className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
-  >
-    <option value="">Selecciona tamaño</option>
-    <option value="Chica">Chica</option>
-    <option value="Mediana">Mediana</option>
-    <option value="Grande">Grande</option>
-  </select>
-  <input
-    placeholder="Edificio"
-    value={selectedBodega.edificio}
-    onChange={(e) => handleInputChange("edificio", e.target.value)}
-    className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
-  />
-  <input
-    placeholder="Precio"
-    type="number"
-    value={selectedBodega.precio}
-    onChange={(e) => handleInputChange("precio", e.target.value)}
-    className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
-  />
-  <select
-    value={selectedBodega.estado}
-    onChange={(e) => handleInputChange("estado", e.target.value)}
-    className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
-  >
-    <option value="">Selecciona estado</option>
-    <option value="Vacante">Vacante</option>
-    <option value="Ocupada">Ocupada</option>
-    <option value="Fuera de venta">Fuera de venta</option>
-  </select>
-
-  <button
-    className="bg-green-500 text-white py-3 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-    onClick={handleSaveChanges}
-  >
-    Guardar Cambios
-  </button>
-</div>
-
+              <input
+                disabled
+                value={selectedBodega.id}
+                className="p-3 border-2 border-gray-300 rounded-lg bg-gray-200 text-black font-medium focus:outline-none"
+              />
+              <select
+                value={selectedBodega.tamano}
+                onChange={(e) => handleInputChange("tamano", e.target.value)}
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="Chica">Chica</option>
+                <option value="Mediana">Mediana</option>
+                <option value="Grande">Grande</option>
+              </select>
+              <input
+                value={selectedBodega.edificio}
+                onChange={(e) => handleInputChange("edificio", e.target.value)}
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <input
+                value={selectedBodega.precio}
+                onChange={(e) => handleInputChange("precio", e.target.value)}
+                type="number"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+              <select
+                value={selectedBodega.estado}
+                onChange={(e) => handleInputChange("estado", e.target.value)}
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="Vacante">Vacante</option>
+                <option value="Ocupada">Ocupada</option>
+                <option value="Fuera de venta">Fuera de venta</option>
+              </select>
+              <button
+                onClick={handleSaveChanges}
+                className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+              >
+                Guardar cambios
+              </button>
+            </div>
           </div>
         </div>
       )}

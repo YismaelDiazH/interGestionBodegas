@@ -26,10 +26,19 @@ const BodegaGestion = () => {
     if (isFormValid()) {
       const nuevaBodega = { folio, precio, tamano, vacante, edificio, estado: vacante };
       setBodegas([...bodegas, nuevaBodega]);
+
       Swal.fire({
         icon: "success",
         title: "Bodega registrada",
         text: "Los datos se han guardado correctamente",
+        showCancelButton: true,
+        confirmButtonText: "Ir al listado de bodegas",
+        cancelButtonText: "Cerrar",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/sedes/vistabodega"; 
+        }
       });
 
       // Limpiar campos
@@ -47,54 +56,8 @@ const BodegaGestion = () => {
     }
   };
 
-  // Función para editar los datos de una bodega
-  const handleEdit = (bodega) => {
-    if (bodega.estado === "ocupada") {
-      Swal.fire({
-        icon: "error",
-        title: "Bodega ocupada",
-        text: "No se pueden modificar los datos de una bodega que está en renta.",
-      });
-      return;
-    }
-
-    setBodegaEdicion(bodega);
-    setFolio(bodega.folio);
-    setPrecio(bodega.precio);
-    setTamano(bodega.tamano);
-    setVacante(bodega.estado);
-    setEdificio(bodega.edificio);
-  };
-
-  // Función para guardar la edición de una bodega
-  const handleSaveEdit = () => {
-    if (isFormValid()) {
-      const updatedBodegas = bodegas.map((bodega) =>
-        bodega.folio === bodegaEdicion.folio
-          ? { ...bodega, folio, precio, tamano, estado: vacante, edificio }
-          : bodega
-      );
-      setBodegas(updatedBodegas);
-
-      Swal.fire({
-        icon: "success",
-        title: "Bodega modificada",
-        text: "Los datos se han actualizado correctamente",
-      });
-
-      setBodegaEdicion(null);
-      setFolio("");
-      setPrecio("");
-      setTamano("");
-      setVacante("");
-      setEdificio("");
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Por favor completa todos los campos.",
-      });
-    }
+  const handleRedirection = () => {
+    window.location.href = "/sedes/vistabodega"; 
   };
 
   return (
@@ -163,12 +126,19 @@ const BodegaGestion = () => {
                 : "bg-gray-400 text-gray-700 cursor-not-allowed"
             }`}
             disabled={!isFormValid() || bodegaEdicion}
-            onClick={bodegaEdicion ? handleSaveEdit : handleSubmit}
+            onClick={handleSubmit}
           >
             {bodegaEdicion ? "Guardar Cambios" : "Registrar Bodega"}
           </button>
+
+          <button
+            className="w-full p-3 mt-4 text-lg rounded-lg bg-orange-600 text-white"
+            onClick={handleRedirection}
+          >
+            Ir al listado de bodegas
+          </button>
+
         </div>
-        
       </main>
     </div>
   );
