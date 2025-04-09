@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; // Importa Link para navegación
+import { Link } from "react-router-dom"; 
 
 // Simulación de datos
 const bodegasSimuladas = [
@@ -52,7 +52,6 @@ const DashboardAdministrador = () => {
         Dashboard del Administrador
       </h1>
 
-      {/* Filtros y botones alineados */}
       <div className="flex justify-between items-center mb-8">
         <div className="flex gap-4">
           <select
@@ -77,7 +76,6 @@ const DashboardAdministrador = () => {
           </select>
         </div>
 
-        {/* Botones de Lista de Bodegas y Lista de Clientes */}
         <div className="flex gap-4">
           <Link to="/sedes/vistabodega">
             <button className="flex items-center justify-center p-3 bg-orange-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
@@ -100,7 +98,6 @@ const DashboardAdministrador = () => {
         <MetricCard titulo="Vacantes" valor={vacantes} color="yellow" />
       </div>
 
-      {/* Bodegas por desalojar */}
       <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
         <h2 className="text-xl font-semibold text-red-500 mb-4">
           Bodegas por desalojar
@@ -132,7 +129,6 @@ const DashboardAdministrador = () => {
         )}
       </div>
 
-      {/* Clientes por pagar */}
       <div className="bg-white p-6 rounded-xl shadow-lg">
         <h2 className="text-xl font-semibold text-orange-500 mb-4">
           Clientes que faltan por pagar

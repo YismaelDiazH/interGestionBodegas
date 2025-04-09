@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Plus, Edit } from "lucide-react"; // Asegúrate de importar los íconos correctos
+import { Plus, Edit } from "lucide-react"; 
 import Swal from "sweetalert2";
 
-// Simulación de bodegas registradas
+
 const bodegasSimuladas = [
   { id: "B1", estado: "vacante", precio: 1500, tamano: "chica", edificio: "A", folio: "B32" },
   { id: "B2", estado: "ocupada", precio: 1800, tamano: "mediana", edificio: "B", folio: "B33" },
@@ -18,10 +18,8 @@ const BodegaGestion = () => {
   const [edificio, setEdificio] = useState("");
   const [bodegaEdicion, setBodegaEdicion] = useState(null);
 
-  // Validación para verificar si el formulario está completo
   const isFormValid = () => folio && precio && tamano && vacante && edificio;
-
-  // Función para registrar una nueva bodega
+  
   const handleSubmit = () => {
     if (isFormValid()) {
       const nuevaBodega = { folio, precio, tamano, vacante, edificio, estado: vacante };
@@ -41,7 +39,6 @@ const BodegaGestion = () => {
         }
       });
 
-      // Limpiar campos
       setFolio("");
       setPrecio("");
       setTamano("");
@@ -74,7 +71,7 @@ const BodegaGestion = () => {
               placeholder="Folio (Ej: B32)"
               value={folio}
               onChange={(e) => setFolio(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} // No permitir modificar el folio si está ocupada
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             />
             <input
               className="w-full p-3 border border-gray-300 rounded-lg"
@@ -82,7 +79,7 @@ const BodegaGestion = () => {
               type="number"
               value={precio}
               onChange={(e) => setPrecio(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} // No permitir modificar el precio si está ocupada
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             />
           </div>
 
@@ -91,7 +88,7 @@ const BodegaGestion = () => {
               className="w-full p-3 border border-gray-300 rounded-lg"
               value={tamano}
               onChange={(e) => setTamano(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} // No permitir modificar el tamaño si está ocupada
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             >
               <option value="">Tamaño de la bodega</option>
               <option value="chica">Chica</option>
@@ -102,7 +99,7 @@ const BodegaGestion = () => {
               className="w-full p-3 border border-gray-300 rounded-lg"
               value={vacante}
               onChange={(e) => setVacante(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} // No permitir modificar el estado si está ocupada
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             >
               <option value="">Estado</option>
               <option value="ocupada">Ocupada</option>
@@ -116,7 +113,7 @@ const BodegaGestion = () => {
             placeholder="Edificio (Ej: A, B, C...)"
             value={edificio}
             onChange={(e) => setEdificio(e.target.value)}
-            disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} // No permitir modificar el edificio si está ocupada
+            disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
           />
 
           <button
