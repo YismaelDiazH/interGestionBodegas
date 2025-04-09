@@ -1,9 +1,9 @@
 // src/routes/SedeAdminRoutes.jsx
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import BodegaGestion from "../components/AdminSede/sede/AgregarBodega";
-import VistaBodega from "../components/AdminSede/sede/VistaBodegas";
-import VistaCliente from "../components/AdminSede/sede/ListaClientes";
+import BodegaGestion from "../components/AdminSede/AgregarBodega";
+import VistaBodega from "../components/AdminSede/VistaBodegas";
+import VistaCliente from "../components/AdminSede/ListaClientes";
 import DashboardAdministrador from "../components/AdminSede/Dashboard";
 
 const SedeAdminRoutes = () => {
