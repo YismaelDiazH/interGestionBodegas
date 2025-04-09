@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus, Edit } from "lucide-react"; // Asegúrate de importar los íconos correctos
 import Swal from "sweetalert2";
 
 // Simulación de bodegas registradas
@@ -167,27 +168,7 @@ const BodegaGestion = () => {
             {bodegaEdicion ? "Guardar Cambios" : "Registrar Bodega"}
           </button>
         </div>
-
-        {/* Listado de bodegas */}
-        <div className="bg-white text-black w-full max-w-2xl p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-bold text-center mb-4 text-orange-500">
-            Bodegas Registradas
-          </h3>
-          <ul>
-            {bodegas.map((bodega) => (
-              <li key={bodega.folio} className="flex justify-between items-center py-2">
-                <span>{`Folio: ${bodega.folio} - ${bodega.tamano} - ${bodega.edificio}`}</span>
-                <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                  onClick={() => handleEdit(bodega)}
-                  disabled={bodega.estado === "ocupada"}
-                >
-                  {bodega.estado === "ocupada" ? "No editable" : "Editar"}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        
       </main>
     </div>
   );
