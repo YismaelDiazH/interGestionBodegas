@@ -1,20 +1,29 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; 
-
-// Simulación de datos
-const bodegasSimuladas = [
-  { id: "B1", estado: "ocupada", estatusPago: "pagado", precio: 1500, edificio: "A", tamano: "chica", cliente: "Cliente A" },
-  { id: "B2", estado: "vacante", estatusPago: "pagado", precio: 0, edificio: "B", tamano: "mediana", cliente: "Cliente B" },
-  { id: "B3", estado: "ocupada", estatusPago: "impago", precio: 1800, edificio: "C", tamano: "grande", cliente: "Cliente C" },
-  { id: "B4", estado: "ocupada", estatusPago: "pagado", precio: 2200, edificio: "A", tamano: "mediana", cliente: "Cliente D" },
-  { id: "B5", estado: "ocupada", estatusPago: "impago", precio: 2100, edificio: "B", tamano: "chica", cliente: "Cliente E" },
-];
+import { Link } from "react-router-dom";
+import axios from "axios"; 
 
 const DashboardAdministrador = () => {
-  const [bodegas] = useState(bodegasSimuladas);
+  const [bodegas, setBodegas] = useState([]);
   const [filtroEdificio, setFiltroEdificio] = useState("");
   const [filtroTamano, setFiltroTamano] = useState("");
+
+ 
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/bodegas/") 
+      .then((response) => {
+        setBodegas(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las bodegas:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al cargar las bodegas.",
+        });
+      });
+  }, []);
 
   const bodegasFiltradas = useMemo(() => {
     return bodegas.filter((b) => {
@@ -166,15 +175,17 @@ const DashboardAdministrador = () => {
 
 const MetricCard = ({ titulo, valor, color }) => {
   const colorClass = {
-    green: "text-green-600",
-    blue: "text-blue-600",
-    yellow: "text-yellow-500",
-  }[color] || "text-gray-800";
+    green: "bg-green-200 text-green-800",
+    blue: "bg-blue-200 text-blue-800",
+    yellow: "bg-yellow-200 text-yellow-800",
+  };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-lg font-semibold text-gray-700">{titulo}</h2>
-      <p className={`text-2xl font-bold ${colorClass}`}>{valor}</p>
+    <div
+      className={`p-6 bg-${color}-200 rounded-lg shadow-lg text-center text-lg font-semibold ${colorClass[color]}`}
+    >
+      <p>{titulo}</p>
+      <p className="text-2xl font-bold">{valor}</p>
     </div>
   );
 };
