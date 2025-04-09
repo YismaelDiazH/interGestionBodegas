@@ -33,17 +33,41 @@ const UserAdminForm = ({ users, setUsers }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Guardar administrador
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (isEditing) {
-      setUsers(users.map(user => (user.id === parseInt(id) ? formData : user)));
-    } else {
-      setUsers([...users, { ...formData, id: users.length + 1 }]);
+  
+    const payload = {
+      nombre: formData.firstName,
+      apellidoPaterno: formData.lastName,
+      apellidoMaterno: "S/N",
+      email: formData.email,
+      telefono: formData.phone,
+      rfc: formData.rfc,
+      direccion: formData.address,
+      codigopos: formData.postalCode,
+      rol: "ADMINISTRADOR",
+      password: "Temporal123!" // temporal o aleatorio si es creación
+    };
+  
+    try {
+      if (isEditing) {
+        await fetch(`http://localhost:8080/api/usuarios/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        await fetch("http://localhost:8080/api/usuarios/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      }
+  
+      navigate("/admin/administradores");
+    } catch (err) {
+      console.error("Error al guardar:", err);
     }
-    
-    navigate("/admin/administradores");
   };
 
   return (
@@ -178,7 +202,7 @@ const UserAdminForm = ({ users, setUsers }) => {
       </p>
 
       {/* Botón de Envío */}
-      <button className="btn btn-primary btn-wide mt-4" type="submit">
+      <button className="btn custom-bg btn-wide mt-4" type="submit">
         {isEditing ? "Guardar Cambios" : "Agregar Administrador"}
       </button>
     </form>

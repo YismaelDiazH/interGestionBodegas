@@ -11,10 +11,11 @@ import AdminRoutes from "./routes/AdminRoutes";
 import MainView from "./components/MainPage/MainView";
 import LoginView from "./components/Login/LoginView";
 import RegistrationView from "./components/Registration/RegistrationView";
+import { ColorProvider } from "./context/ColorContext";
 import "./App.css";
 
 // Simulación del rol actual
-const userRole = "sede"; // o "sede"
+const userRole = "admin"; // o "sede"
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -42,9 +43,12 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
+    <ColorProvider>
+    
     <Router>
       <AnimatedRoutes />
     </Router>
+    </ColorProvider>
   );
 }
 
