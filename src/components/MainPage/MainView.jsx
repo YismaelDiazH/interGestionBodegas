@@ -32,6 +32,9 @@ export default function MainView() {
 
         {/* Menú en pantallas grandes */}
         <nav className="hidden md:flex space-x-4">
+          <a href="/" className="hover:underline">
+            Inicio
+          </a>
           <a href="/login" className="hover:underline">
             Iniciar sesión
           </a>
@@ -61,13 +64,10 @@ export default function MainView() {
             <X size={28} />
           </button>
           <nav className="mt-10 flex flex-col space-y-4">
-            <a href="#" className="hover:underline">
-              Inicio
+            <a href="/login" className="hover:underline">
+              Iniciar sesión
             </a>
-            <a href="#" className="hover:underline">
-              Iniciar Sesión
-            </a>
-            <a href="#" className="hover:underline">
+            <a href="#contact-link" className="hover:underline">
               Contacto
             </a>
           </nav>
