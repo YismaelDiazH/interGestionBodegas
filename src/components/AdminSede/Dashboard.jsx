@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom"; 
 
-// Simulación de datos (puedes sustituirlo por datos reales desde API)
+// Simulación de datos
 const bodegasSimuladas = [
   { id: "B1", estado: "ocupada", estatusPago: "pagado", precio: 1500, edificio: "A", tamano: "chica", cliente: "Cliente A" },
   { id: "B2", estado: "vacante", estatusPago: "pagado", precio: 0, edificio: "B", tamano: "mediana", cliente: "Cliente B" },
@@ -51,28 +52,43 @@ const DashboardAdministrador = () => {
         Dashboard del Administrador
       </h1>
 
-      {/* Filtros */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <select
-          className="p-3 rounded-lg border border-gray-300"
-          value={filtroEdificio}
-          onChange={(e) => setFiltroEdificio(e.target.value)}
-        >
-          <option value="">Todos los edificios</option>
-          <option value="A">Edificio A</option>
-          <option value="B">Edificio B</option>
-          <option value="C">Edificio C</option>
-        </select>
-        <select
-          className="p-3 rounded-lg border border-gray-300"
-          value={filtroTamano}
-          onChange={(e) => setFiltroTamano(e.target.value)}
-        >
-          <option value="">Todos los tamaños</option>
-          <option value="chica">Chica</option>
-          <option value="mediana">Mediana</option>
-          <option value="grande">Grande</option>
-        </select>
+      <div className="flex justify-between items-center mb-8">
+        <div className="flex gap-4">
+          <select
+            className="p-3 rounded-lg border border-gray-300 bg-white font-semibold text-gray-700 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+            value={filtroEdificio}
+            onChange={(e) => setFiltroEdificio(e.target.value)}
+          >
+            <option value="">Todos los edificios</option>
+            <option value="A">Edificio A</option>
+            <option value="B">Edificio B</option>
+            <option value="C">Edificio C</option>
+          </select>
+          <select
+            className="p-3 rounded-lg border border-gray-300 bg-white font-semibold text-gray-700 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+            value={filtroTamano}
+            onChange={(e) => setFiltroTamano(e.target.value)}
+          >
+            <option value="">Todos los tamaños</option>
+            <option value="chica">Chica</option>
+            <option value="mediana">Mediana</option>
+            <option value="grande">Grande</option>
+          </select>
+        </div>
+
+        <div className="flex gap-4">
+          <Link to="/sedes/vistabodega">
+            <button className="flex items-center justify-center p-3 bg-orange-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+              Lista de Bodegas
+            </button>
+          </Link>
+
+          <Link to="/sedes/vistacliente">
+            <button className="flex items-center justify-center p-3 bg-orange-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+              Lista de Clientes
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Métricas */}
@@ -82,7 +98,6 @@ const DashboardAdministrador = () => {
         <MetricCard titulo="Vacantes" valor={vacantes} color="yellow" />
       </div>
 
-      {/* Bodegas por desalojar */}
       <div className="bg-white p-6 rounded-xl shadow-lg mb-8">
         <h2 className="text-xl font-semibold text-red-500 mb-4">
           Bodegas por desalojar
@@ -114,7 +129,6 @@ const DashboardAdministrador = () => {
         )}
       </div>
 
-      {/* Clientes por pagar */}
       <div className="bg-white p-6 rounded-xl shadow-lg">
         <h2 className="text-xl font-semibold text-orange-500 mb-4">
           Clientes que faltan por pagar
@@ -150,7 +164,6 @@ const DashboardAdministrador = () => {
   );
 };
 
-// Componente reutilizable para métricas
 const MetricCard = ({ titulo, valor, color }) => {
   const colorClass = {
     green: "text-green-600",

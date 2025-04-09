@@ -1,2 +1,17 @@
-@import "tailwindcss";
-@plugin "daisyui";
+
+
+:root {
+    --custom-color: orange; 
+  }
+
+
+
+  .custom-bg {
+    background-color: var(--custom-color) !important;
+    color: white; 
+    mix-blend-mode: difference; 
+    border: 0cap;
+
+  }
+  @import "tailwindcss";@import "tailwindcss";
+  @plugin "daisyui";

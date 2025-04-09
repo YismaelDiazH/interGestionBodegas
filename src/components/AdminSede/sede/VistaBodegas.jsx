@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, LogOut, Plus, Edit, X } from "lucide-react";
+import { Menu, LogOut, Plus, Edit, X, Trash } from "lucide-react";
 import Swal from "sweetalert2";
 
 const VistaBodega = () => {
@@ -37,6 +37,28 @@ const VistaBodega = () => {
   const handleEdit = (bodega) => {
     setSelectedBodega(bodega);
     setModalOpen(true);
+  };
+
+  const handleDelete = (bodega) => {
+    Swal.fire({
+      title: `¿Eliminar la bodega ${bodega.id}?`,
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#aaa",
+      confirmButtonText: "Sí, eliminar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setBodegas((prev) => prev.filter((b) => b.id !== bodega.id));
+        Swal.fire({
+          icon: "success",
+          title: "Bodega eliminada",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
   };
 
   const handleInputChange = (field, value) => {
@@ -91,6 +113,24 @@ const VistaBodega = () => {
     });
   };
 
+  const getEstadoColor = (estado) => {
+    switch (estado) {
+      case "Vacante":
+        return "text-green-600";
+      case "Ocupada":
+        return "text-red-600";
+      case "Fuera de venta":
+        return "text-yellow-600";
+      default:
+        return "text-gray-600";
+    }
+  };
+
+  
+  const handleGoToAnotherPage = () => {
+    window.location.href = "/sedes/dashboard"; 
+  };
+
   return (
     <div className="flex flex-col min-h-screen w-screen bg-white overflow-hidden">
       <nav className="bg-orange-500 text-white p-4 flex justify-between items-center w-full shadow-md fixed top-0 left-0 z-50">
@@ -127,18 +167,29 @@ const VistaBodega = () => {
               </thead>
               <tbody>
                 {bodegas.map((bodega, index) => (
-                  <tr key={index} className="text-gray-800 text-center">
+                  <tr
+                    key={index}
+                    className={`text-gray-800 text-center bg-white hover:bg-gray-50`}
+                  >
                     <td className="p-3 border border-gray-300">{bodega.id}</td>
                     <td className="p-3 border border-gray-300">{bodega.tamano}</td>
                     <td className="p-3 border border-gray-300">{bodega.edificio}</td>
                     <td className="p-3 border border-gray-300">${bodega.precio}</td>
-                    <td className="p-3 border border-gray-300">{bodega.estado}</td>
-                    <td className="p-3 border border-gray-300">
+                    <td className={`p-3 border border-gray-300 font-semibold ${getEstadoColor(bodega.estado)}`}>
+                      {bodega.estado}
+                    </td>
+                    <td className="p-3 border border-gray-300 flex justify-center space-x-2">
                       <button
                         className="bg-blue-500 text-white px-3 py-1 rounded-lg flex items-center hover:bg-blue-600"
                         onClick={() => handleEdit(bodega)}
                       >
                         <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        className="bg-red-500 text-white px-3 py-1 rounded-lg flex items-center hover:bg-red-600"
+                        onClick={() => handleDelete(bodega)}
+                      >
+                        <Trash className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
@@ -154,6 +205,13 @@ const VistaBodega = () => {
             </table>
           </div>
         </div>
+
+        <button
+          onClick={handleGoToAnotherPage}
+          className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
+        >
+          Ir al menu principal
+        </button>
       </div>
 
       {modalOpen && selectedBodega && (
@@ -165,53 +223,48 @@ const VistaBodega = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            <h2 className="text-xl font-bold mb-4">Editar Bodega</h2>
+            <h2 className="text-xl font-bold mb-4 text-orange-500">Editar Bodega</h2>
 
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-6">
               <input
                 disabled
                 value={selectedBodega.id}
-                className="p-2 border border-gray-300 rounded-lg bg-gray-100"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-gray-200 text-black font-medium focus:outline-none"
               />
               <select
                 value={selectedBodega.tamano}
                 onChange={(e) => handleInputChange("tamano", e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
-                <option value="">Selecciona tamaño</option>
                 <option value="Chica">Chica</option>
                 <option value="Mediana">Mediana</option>
                 <option value="Grande">Grande</option>
               </select>
               <input
-                placeholder="Edificio"
                 value={selectedBodega.edificio}
                 onChange={(e) => handleInputChange("edificio", e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               <input
-                placeholder="Precio"
-                type="number"
                 value={selectedBodega.precio}
                 onChange={(e) => handleInputChange("precio", e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
+                type="number"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
               <select
                 value={selectedBodega.estado}
                 onChange={(e) => handleInputChange("estado", e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg"
+                className="p-3 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
-                <option value="">Selecciona estado</option>
                 <option value="Vacante">Vacante</option>
                 <option value="Ocupada">Ocupada</option>
                 <option value="Fuera de venta">Fuera de venta</option>
               </select>
-
               <button
-                className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
                 onClick={handleSaveChanges}
+                className="mt-6 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-300"
               >
-                Guardar Cambios
+                Guardar cambios
               </button>
             </div>
           </div>
