@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, LogOut, Plus, Edit } from "lucide-react";
-import Swal from "sweetalert2";
+
 
 const VistaCliente = () => {
   const [clientes, setClientes] = useState([
