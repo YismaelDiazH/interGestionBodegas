@@ -26,7 +26,7 @@ import PaymentsView from "./components/Registration/PaymentsView";
 import ExpirationView from "./components/Registration/ExpirationView";
 
 // Simulación del rol actual (puedes cambiarlo según lógica real)
-const userRole = "sede"; // "admin" o "sede"
+const userRole = "admin"; // "admin" o "sede"
 
 const AnimatedRoutes = () => {
   const location = useLocation();
