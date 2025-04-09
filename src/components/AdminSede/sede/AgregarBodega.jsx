@@ -1,49 +1,90 @@
-import { useState } from "react";
-import { Plus, Edit } from "lucide-react"; 
+import { useState, useEffect } from "react";
+import { Plus, Edit } from "lucide-react";
 import Swal from "sweetalert2";
-
-
-const bodegasSimuladas = [
-  { id: "B1", estado: "vacante", precio: 1500, tamano: "chica", edificio: "A", folio: "B32" },
-  { id: "B2", estado: "ocupada", precio: 1800, tamano: "mediana", edificio: "B", folio: "B33" },
-  { id: "B3", estado: "vacante", precio: 2200, tamano: "grande", edificio: "C", folio: "B34" },
-];
+import axios from "axios"; // Importamos axios para las peticiones HTTP
 
 const BodegaGestion = () => {
-  const [bodegas, setBodegas] = useState(bodegasSimuladas);
+  const [bodegas, setBodegas] = useState([]); // Bodegas del estado
   const [folio, setFolio] = useState("");
   const [precio, setPrecio] = useState("");
   const [tamano, setTamano] = useState("");
   const [vacante, setVacante] = useState("");
   const [edificio, setEdificio] = useState("");
-  const [bodegaEdicion, setBodegaEdicion] = useState(null);
+  const [bodegaEdicion, setBodegaEdicion] = useState(null); // Bodega que estás editando
+
+  // Cargar las bodegas desde el backend cuando el componente se monta
+  useEffect(() => {
+    const obtenerBodegas = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/bodegas/");
+        setBodegas(response.data);
+      } catch (error) {
+        console.error("Error al obtener las bodegas", error);
+      }
+    };
+    obtenerBodegas();
+  }, []);
 
   const isFormValid = () => folio && precio && tamano && vacante && edificio;
-  
-  const handleSubmit = () => {
+
+  const handleSubmit = async () => {
     if (isFormValid()) {
-      const nuevaBodega = { folio, precio, tamano, vacante, edificio, estado: vacante };
-      setBodegas([...bodegas, nuevaBodega]);
+      const nuevaBodega = { folio, precio, tamano, estado: vacante, edificio };
 
-      Swal.fire({
-        icon: "success",
-        title: "Bodega registrada",
-        text: "Los datos se han guardado correctamente",
-        showCancelButton: true,
-        confirmButtonText: "Ir al listado de bodegas",
-        cancelButtonText: "Cerrar",
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "/sedes/vistabodega"; 
+      try {
+        if (bodegaEdicion) {
+          // Si estamos editando, hacemos un PUT
+          const response = await axios.put(
+            `http://localhost:8080/api/bodegas/${bodegaEdicion.id}`,
+            nuevaBodega
+          );
+          setBodegas((prevBodegas) =>
+            prevBodegas.map((bodega) =>
+              bodega.id === bodegaEdicion.id ? response.data : bodega
+            )
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Bodega actualizada",
+            text: "Los cambios se han guardado correctamente",
+          });
+        } else {
+          // Si es una nueva bodega, hacemos un POST
+          const response = await axios.post(
+            "http://localhost:8080/api/bodegas/crear/",
+            nuevaBodega
+          );
+          setBodegas([...bodegas, response.data]); // Añadimos la nueva bodega al estado
+          Swal.fire({
+            icon: "success",
+            title: "Bodega registrada",
+            text: "Los datos se han guardado correctamente",
+            showCancelButton: true,
+            confirmButtonText: "Ir al listado de bodegas",
+            cancelButtonText: "Cerrar",
+            reverseButtons: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/sedes/vistabodega";
+            }
+          });
         }
-      });
 
-      setFolio("");
-      setPrecio("");
-      setTamano("");
-      setVacante("");
-      setEdificio("");
+        // Resetear el formulario después de guardar
+        setFolio("");
+        setPrecio("");
+        setTamano("");
+        setVacante("");
+        setEdificio("");
+        setBodegaEdicion(null); // Restablecer el estado de edición
+      } catch (error) {
+        console.error("Error al guardar la bodega", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los datos.",
+        });
+      }
     } else {
       Swal.fire({
         icon: "error",
@@ -54,7 +95,7 @@ const BodegaGestion = () => {
   };
 
   const handleRedirection = () => {
-    window.location.href = "/sedes/vistabodega"; 
+    window.location.href = "/sedes/vistabodega";
   };
 
   return (
@@ -71,7 +112,7 @@ const BodegaGestion = () => {
               placeholder="Folio (Ej: B32)"
               value={folio}
               onChange={(e) => setFolio(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"}
             />
             <input
               className="w-full p-3 border border-gray-300 rounded-lg"
@@ -79,7 +120,7 @@ const BodegaGestion = () => {
               type="number"
               value={precio}
               onChange={(e) => setPrecio(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"}
             />
           </div>
 
@@ -88,7 +129,7 @@ const BodegaGestion = () => {
               className="w-full p-3 border border-gray-300 rounded-lg"
               value={tamano}
               onChange={(e) => setTamano(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"}
             >
               <option value="">Tamaño de la bodega</option>
               <option value="chica">Chica</option>
@@ -99,7 +140,7 @@ const BodegaGestion = () => {
               className="w-full p-3 border border-gray-300 rounded-lg"
               value={vacante}
               onChange={(e) => setVacante(e.target.value)}
-              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
+              disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"}
             >
               <option value="">Estado</option>
               <option value="ocupada">Ocupada</option>
@@ -113,7 +154,7 @@ const BodegaGestion = () => {
             placeholder="Edificio (Ej: A, B, C...)"
             value={edificio}
             onChange={(e) => setEdificio(e.target.value)}
-            disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
+            disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"}
           />
 
           <button
@@ -134,7 +175,6 @@ const BodegaGestion = () => {
           >
             Ir al listado de bodegas
           </button>
-
         </div>
       </main>
     </div>
