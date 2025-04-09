@@ -12,9 +12,38 @@ const bodegasSimuladas = [
 ];
 
 const DashboardAdministrador = () => {
-  const [bodegas] = useState(bodegasSimuladas);
+  const [bodegas, setBodegas] = useState([]);
   const [filtroEdificio, setFiltroEdificio] = useState("");
   const [filtroTamano, setFiltroTamano] = useState("");
+
+  useEffect(() => {
+    const obtenerBodegas = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/bodega/");
+        setBodegas(response.data);
+      } catch (error) {
+        console.error("Error al obtener las bodegas:", error);
+      }
+    };
+    obtenerBodegas();
+  }, []);
+
+ 
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/bodegas/") 
+      .then((response) => {
+        setBodegas(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener las bodegas:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al cargar las bodegas.",
+        });
+      });
+  }, []);
 
   const bodegasFiltradas = useMemo(() => {
     return bodegas.filter((b) => {
@@ -28,8 +57,12 @@ const DashboardAdministrador = () => {
     .filter((b) => b.estado === "ocupada" && b.estatusPago === "pagado")
     .reduce((acc, b) => acc + b.precio, 0);
 
-  const ocupadas = bodegasFiltradas.filter((b) => b.estado === "ocupada").length;
-  const vacantes = bodegasFiltradas.filter((b) => b.estado === "vacante").length;
+  const ocupadas = bodegasFiltradas.filter(
+    (b) => b.estado === "ocupada"
+  ).length;
+  const vacantes = bodegasFiltradas.filter(
+    (b) => b.estado === "vacante"
+  ).length;
   const porDesalojar = bodegasFiltradas.filter(
     (b) => b.estado === "ocupada" && b.estatusPago === "impago"
   );
@@ -38,12 +71,24 @@ const DashboardAdministrador = () => {
     return bodegasFiltradas.filter((b) => b.estatusPago === "impago");
   }, [bodegasFiltradas]);
 
-  const notificarCliente = (idBodega) => {
-    Swal.fire({
-      icon: "info",
-      title: `Notificación enviada`,
-      text: `Se ha notificado al cliente de la bodega ${idBodega}.`,
-    });
+  const notificarCliente = async (idBodega) => {
+    try {
+      await axios.put(`http://localhost:8080/api/bodegas/${idBodega}`, {
+        estatusPago: "pagado", // Actualizamos el estatus de pago
+      });
+      Swal.fire({
+        icon: "info",
+        title: `Notificación enviada`,
+        text: `Se ha notificado al cliente de la bodega ${idBodega}.`,
+      });
+    } catch (error) {
+      console.error("Error al notificar al cliente:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo notificar al cliente.",
+      });
+    }
   };
 
   return (
@@ -93,7 +138,11 @@ const DashboardAdministrador = () => {
 
       {/* Métricas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <MetricCard titulo="Ingresos Totales" valor={`$${totalIngresos}`} color="green" />
+        <MetricCard
+          titulo="Ingresos Totales"
+          valor={`$${totalIngresos}`}
+          color="green"
+        />
         <MetricCard titulo="Ocupadas" valor={ocupadas} color="blue" />
         <MetricCard titulo="Vacantes" valor={vacantes} color="yellow" />
       </div>
@@ -143,9 +192,12 @@ const DashboardAdministrador = () => {
                 <div>
                   <p className="font-semibold">Cliente: {bodega.cliente}</p>
                   <p className="text-sm text-gray-600">
-                    Bodega {bodega.id} - Edificio {bodega.edificio} - Tamaño {bodega.tamano}
+                    Bodega {bodega.id} - Edificio {bodega.edificio} - Tamaño{" "}
+                    {bodega.tamano}
                   </p>
-                  <p className="text-sm text-red-500">Precio: ${bodega.precio}</p>
+                  <p className="text-sm text-red-500">
+                    Precio: ${bodega.precio}
+                  </p>
                 </div>
                 <button
                   className="mt-2 sm:mt-0 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
@@ -157,7 +209,9 @@ const DashboardAdministrador = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">Todos los clientes están al día con sus pagos.</p>
+          <p className="text-gray-500">
+            Todos los clientes están al día con sus pagos.
+          </p>
         )}
       </div>
     </div>
@@ -172,9 +226,11 @@ const MetricCard = ({ titulo, valor, color }) => {
   }[color] || "text-gray-800";
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-lg font-semibold text-gray-700">{titulo}</h2>
-      <p className={`text-2xl font-bold ${colorClass}`}>{valor}</p>
+    <div
+      className={`p-6 bg-${color}-200 rounded-lg shadow-lg text-center text-lg font-semibold ${colorClass[color]}`}
+    >
+      <p>{titulo}</p>
+      <p className="text-2xl font-bold">{valor}</p>
     </div>
   );
 };

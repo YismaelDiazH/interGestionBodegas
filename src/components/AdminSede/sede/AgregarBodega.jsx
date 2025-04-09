@@ -47,14 +47,15 @@ const BodegaGestion = () => {
     } else {
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Por favor completa todos los campos.",
+        title: "Error al guardar",
+        text: "No se pudo registrar la bodega. Intenta más tarde.",
       });
+      console.error("Error al guardar:", error);
     }
   };
 
   const handleRedirection = () => {
-    window.location.href = "/sedes/vistabodega"; 
+    window.location.href = "/sedes/vistabodega";
   };
 
   return (
@@ -62,7 +63,7 @@ const BodegaGestion = () => {
       <main className="pt-28 px-4 md:px-8 flex flex-col items-center min-h-screen bg-black">
         <div className="bg-white text-black w-full max-w-2xl p-8 rounded-xl shadow-lg mb-10">
           <h2 className="text-center text-3xl font-bold text-orange-500 mb-6">
-            {bodegaEdicion ? "Editar Bodega" : "Alta de Bodega"}
+            Alta de Bodega
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -91,9 +92,9 @@ const BodegaGestion = () => {
               disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             >
               <option value="">Tamaño de la bodega</option>
-              <option value="chica">Chica</option>
-              <option value="mediana">Mediana</option>
-              <option value="grande">Grande</option>
+              <option value="Chica">Chica</option>
+              <option value="Mediana">Mediana</option>
+              <option value="Grande">Grande</option>
             </select>
             <select
               className="w-full p-3 border border-gray-300 rounded-lg"
@@ -102,9 +103,9 @@ const BodegaGestion = () => {
               disabled={bodegaEdicion && bodegaEdicion.estado === "ocupada"} 
             >
               <option value="">Estado</option>
-              <option value="ocupada">Ocupada</option>
-              <option value="vacante">Vacante</option>
-              <option value="fuera de venta">Fuera de Venta</option>
+              <option value="DISPONIBLE">Disponible</option>
+              <option value="OCUPADA">Ocupada</option>
+              <option value="FUERA DE VENTA">Fuera de Venta</option>
             </select>
           </div>
 
@@ -117,15 +118,15 @@ const BodegaGestion = () => {
           />
 
           <button
-            className={`w-full p-3 text-lg rounded-lg transition-all duration-300 ${
-              isFormValid() && !bodegaEdicion
+            className={`w-full p-3 mt-6 text-lg rounded-lg transition-all duration-300 ${
+              isFormValid()
                 ? "bg-orange-500 hover:bg-orange-600 text-white"
                 : "bg-gray-400 text-gray-700 cursor-not-allowed"
             }`}
-            disabled={!isFormValid() || bodegaEdicion}
+            disabled={!isFormValid()}
             onClick={handleSubmit}
           >
-            {bodegaEdicion ? "Guardar Cambios" : "Registrar Bodega"}
+            Registrar Bodega
           </button>
 
           <button
@@ -134,7 +135,6 @@ const BodegaGestion = () => {
           >
             Ir al listado de bodegas
           </button>
-
         </div>
       </main>
     </div>

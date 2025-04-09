@@ -1,34 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, LogOut, Plus, Edit, X, Trash } from "lucide-react";
 import Swal from "sweetalert2";
+import axios from "axios"; 
 
 const VistaBodega = () => {
-  const [bodegas, setBodegas] = useState([
-    {
-      id: "B32",
-      tamano: "Mediana",
-      edificio: "A",
-      precio: 1500,
-      estado: "Ocupada",
-    },
-    {
-      id: "B33",
-      tamano: "Grande",
-      edificio: "B",
-      precio: 2200,
-      estado: "Vacante",
-    },
-    {
-      id: "B34",
-      tamano: "Chica",
-      edificio: "A",
-      precio: 1000,
-      estado: "Fuera de venta",
-    },
-  ]);
-
+  const [bodegas, setBodegas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedBodega, setSelectedBodega] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/bodegas/")
+      .then((response) => setBodegas(response.data))
+      .catch((error) => console.error("Error al obtener bodegas:", error));
+  }, []);
 
   const handleNewBodega = () => {
     window.location.href = "/sedes/gestion";
@@ -50,13 +34,17 @@ const VistaBodega = () => {
       confirmButtonText: "Sí, eliminar",
     }).then((result) => {
       if (result.isConfirmed) {
-        setBodegas((prev) => prev.filter((b) => b.id !== bodega.id));
-        Swal.fire({
-          icon: "success",
-          title: "Bodega eliminada",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+        axios.delete(`http://localhost:8080/api/bodegas/Eliminar/${bodega.id}`)
+          .then(() => {
+            setBodegas((prev) => prev.filter((b) => b.id !== bodega.id));
+            Swal.fire({
+              icon: "success",
+              title: "Bodega eliminada",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
+          .catch((error) => console.error("Error al eliminar la bodega:", error));
       }
     });
   };
@@ -100,17 +88,28 @@ const VistaBodega = () => {
       return;
     }
 
-    setBodegas((prev) =>
-      prev.map((b) => (b.id === selectedBodega.id ? selectedBodega : b))
-    );
-
-    setModalOpen(false);
-    Swal.fire({
-      icon: "success",
-      title: "Bodega actualizada",
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    // Actualizar la bodega
+    axios.put(`http://localhost:8080/api/bodegas/${selectedBodega.id}`, selectedBodega)
+      .then((response) => {
+        setBodegas((prev) =>
+          prev.map((b) => (b.id === selectedBodega.id ? selectedBodega : b))
+        );
+        setModalOpen(false);
+        Swal.fire({
+          icon: "success",
+          title: "Bodega actualizada",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
+        console.error("Error al actualizar bodega:", error);
+      });
   };
 
   const getEstadoColor = (estado) => {
@@ -126,7 +125,6 @@ const VistaBodega = () => {
     }
   };
 
-  
   const handleGoToAnotherPage = () => {
     window.location.href = "/sedes/dashboard"; 
   };
