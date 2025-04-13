@@ -7,10 +7,10 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className={`h-screen  custom-bg  shadow-sm ${isOpen ? "w-64" : "w-20"} transition-all duration-300 p-4 flex flex-col`}>
+    <div className={`h-screen  custom-bg  shadow-lg  ${isOpen ? "w-52" : "w-20"} transition-all duration-300 p-4 flex flex-col`}>
       {/* Botón para expandir/cerrar */}
       <button 
-        className="btn btn-square btn-ghost mb-4 self-end"
+        className="btn btn-square btn-ghost b-4 self-end"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? "←" : "→"}

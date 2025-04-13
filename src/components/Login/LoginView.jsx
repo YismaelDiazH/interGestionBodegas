@@ -3,6 +3,13 @@ import back from "./img/cop.jpg";
 import media from "./img/media.png";
 import front from "./img/front.png";
 
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+}
 const images = [
   front,
   "https://todowine.com/wp-content/uploads/2022/03/bodealba-almacen.png",
@@ -26,24 +33,57 @@ export default function LoginView() {
     return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Limpiar errores previos
-
-    // Validaciones de los campos
+    setError("");
+  
     if (!email || !password) {
       setError("Todos los campos son obligatorios.");
       return;
     }
-
+  
     if (!validateEmail(email)) {
       setError("Por favor, ingresa un correo electrónico válido.");
       return;
     }
-
-    // Aquí podrías hacer una petición de login si las validaciones pasan
-    console.log("Formulario enviado correctamente");
+  
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Credenciales inválidas");
+      }
+  
+      const token = await response.text();
+      localStorage.setItem("token", token);
+  
+      const payload = parseJwt(token);
+      const role = payload?.role;
+      localStorage.setItem("user", JSON.stringify(payload));
+  
+      // Redirección por rol
+      switch (role) {
+        case "SUPERADMINISTRADOR":
+          window.location.href = "/admin/";
+          break;
+        case "ADMINISTRADOR":
+          window.location.href = "/sedes/dashboard";
+          break;
+        case "CLIENTE":
+          window.location.href = "/ExpirationView";
+          break;
+        default:
+          setError("Rol no reconocido.");
+      }
+    } catch (err) {
+      setError(err.message);
+    }
   };
+  
 
   const validateEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -117,12 +157,11 @@ export default function LoginView() {
               </button>
 */}
 
-              <a
-                href="/wineries"
+              <button type="submit"
                 className="w-full bg-[#FF7700] text-white py-2 rounded-md mb-4 block text-center hover:bg-[#a77d4e]"
               >
                 Entrar
-              </a>
+              </button>
             </form>
 
             <div className="text-center mb-6">

@@ -1,247 +1,253 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const UserAdminForm = ({ users, setUsers }) => {
+const UserAdminForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = id !== undefined;
 
-  const initialState = { 
-    firstName: "", 
-    lastName: "", 
-    lastNameMom: "",
-    email: "", 
-    phone: "", 
-    rfc: "", 
-    address: "", 
-    postalCode: ""
+  const initialState = {
+    nombre: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
+    email: "",
+    telefono: "",
+    rfc: "",
+    direccion: "",
+    codigopos: "",
   };
-  
-  const [formData, setFormData] = useState(initialState);
-  
-  useEffect(() => {
-    if (isEditing && users) {
-      const userToEdit = users.find((user) => user.id === parseInt(id));
-      console.log("Usuario a editar:", userToEdit); // Para depuración
-      
-      if (userToEdit) {
-        setFormData({
-          firstName: userToEdit.nombre || "",
-          lastName: userToEdit.apellidoPaterno || "",
-          lastNameMom: userToEdit.apellidoMaterno || "",
-          email: userToEdit.email || "",
-          phone: userToEdit.telefono || "",
-          rfc: userToEdit.rfc || "",
-          address: userToEdit.direccion || "",
-          postalCode: userToEdit.codigopos || ""
-        });
-      }
-    }
-  }, [id, users, isEditing]);
 
-  // Manejar cambios en los inputs
+  const [formData, setFormData] = useState(initialState);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // 🔄 Cargar datos del usuario desde el backend si es edición
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (isEditing) {
+        setLoading(true);
+        try {
+          const response = await fetch(`http://localhost:8080/api/usuarios/${id}`);
+          if (!response.ok) throw new Error("No se pudo obtener el usuario");
+          const data = await response.json();
+          setFormData({
+            nombre: data.nombre || "",
+            apellidoPaterno: data.apellidoPaterno || "",
+            apellidoMaterno: data.apellidoMaterno || "",
+            email: data.email || "",
+            telefono: data.telefono || "",
+            rfc: data.rfc || "",
+            direccion: data.direccion || "",
+            codigopos: data.codigopos || "",
+          });
+        } catch (err) {
+          console.error("Error cargando el usuario:", err);
+          setError("No se pudo cargar el usuario.");
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchUser();
+  }, [id, isEditing]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const payload = {
-      id: isEditing ? parseInt(id) : 0,
-      uuid: isEditing ? (users.find((user) => user.id === parseInt(id))?.uuid || "") : "",
-      nombre: formData.firstName,
-      apellidoPaterno: formData.lastName,
-      apellidoMaterno: formData.lastNameMom,
+      nombre: formData.nombre,
+      apellidoPaterno: formData.apellidoPaterno,
+      apellidoMaterno: formData.apellidoMaterno,
       email: formData.email,
-      telefono: formData.phone,
+      telefono: formData.telefono,
       rfc: formData.rfc,
-      direccion: formData.address,
-      codigopos: formData.postalCode,
+      direccion: formData.direccion,
+      codigopos: formData.codigopos,
       rol: "ADMINISTRADOR",
-      password: isEditing ? 
-        users.find((user) => user.id === parseInt(id))?.password || "Admin123!" : 
-        "Admin123!" // Mantener la contraseña original en edición
+      password: "Admin123!", // puedes ajustar esto si el backend lo requiere
     };
-  
-    console.log("Payload enviado:", payload); // Para depuración
-  
+
+    const method = isEditing ? "PUT" : "POST";
+    const url = isEditing
+      ? `http://localhost:8080/api/usuarios/${id}`
+      : `http://localhost:8080/api/usuarios/`;
+
     try {
-      const response = await fetch(
-        isEditing
-          ? `http://localhost:8080/api/usuarios/${id}`
-          : "http://localhost:8080/api/usuarios/",
-        {
-          method: isEditing ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        }
-      );
-  
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        console.error("Error respuesta del servidor:", errorData);
-        throw new Error("Error al guardar");
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        console.error("Error del servidor:", errorData);
+        throw new Error("No se pudo guardar");
       }
-  
+
       navigate("/admin/administradores");
     } catch (err) {
       console.error("Error al guardar:", err);
       alert("Error al guardar: " + err.message);
     }
   };
-  
+
+  if (loading) return <p className="p-6">Cargando datos del usuario...</p>;
+  if (error) return <p className="p-6 text-red-500">{error}</p>;
+
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-base-100 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">{isEditing ? "Editar Administrador" : "Nuevo Administrador"}</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="p-6 bg-base-100 rounded-lg shadow-md max-w-6xl mx-auto"
+    >
+      <h2 className="text-2xl font-bold mb-6">
+        {isEditing ? "Editar Administrador" : "Nuevo Administrador"}
+      </h2>
 
-      {/* Nombre */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Nombre */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="nombre"
+              required
+              placeholder="Nombre"
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
+              value={formData.nombre}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">
+            Debe tener entre 3 y 50 caracteres y solo contener letras.
+          </p>
+        </div>
 
-        <input
-          type="text"
-          name="firstName"
-          required
-          placeholder="Nombre"
-          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
-          value={formData.firstName}
-          onChange={handleChange}
-        />
-      </label>
-      <p className="validator-hint">
-        Debe tener entre 3 y 50 caracteres y solo contener letras.
-      </p>
+        {/* Apellido Paterno */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="apellidoPaterno"
+              required
+              placeholder="Apellido Paterno"
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
+              value={formData.apellidoPaterno}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe tener entre 3 y 50 caracteres.</p>
+        </div>
 
-      {/* Apellido Paterno */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
+        {/* Apellido Materno */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="apellidoMaterno"
+              required
+              placeholder="Apellido Materno"
+              pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
+              value={formData.apellidoMaterno}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe tener entre 3 y 50 caracteres.</p>
+        </div>
 
-        <input
-          type="text"
-          name="lastName"
-          required
-          placeholder="Apellido Paterno"
-          value={formData.lastName}
-          onChange={handleChange}
-          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
-        />
-      </label>
-      <p className="validator-hint">
-        Debe tener entre 3 y 50 caracteres y solo contener letras.
-      </p>
+        {/* Correo */}
+        <div>
+          <label className="input validator">
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Correo Electrónico"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe ser un correo válido.</p>
+        </div>
 
-      {/* Apellido Materno */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></g></svg>
+        {/* Teléfono */}
+        <div>
+          <label className="input validator">
+            <input
+              type="tel"
+              name="telefono"
+              required
+              pattern="\d{10}"
+              placeholder="Teléfono"
+              value={formData.telefono}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe tener 10 dígitos.</p>
+        </div>
 
-        <input
-          type="text"
-          name="lastNameMom"
-          required
-          placeholder="Apellido Materno"
-          value={formData.lastNameMom}
-          onChange={handleChange}
-          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,50}"
-        />
-      </label>
-      <p className="validator-hint">
-        Debe tener entre 3 y 50 caracteres y solo contener letras.
-      </p>
+        {/* RFC */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="rfc"
+              required
+              placeholder="RFC"
+              pattern="[A-Z]{4}\d{6}[A-Z0-9]{3}"
+              value={formData.rfc}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe ser un RFC válido.</p>
+        </div>
 
-      {/* Correo Electrónico */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></g></svg>
+        {/* Dirección */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="direccion"
+              required
+              placeholder="Dirección"
+              pattern="[A-Za-z0-9.,# ]{5,100}"
+              value={formData.direccion}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Entre 5 y 100 caracteres.</p>
+        </div>
 
-        <input
-          type="email"
-          name="email"
-          required
-          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-          placeholder="Correo Electrónico"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </label>
-      <p className="validator-hint">
-        Debe ser un correo electrónico válido.
-      </p>
+        {/* Código Postal */}
+        <div>
+          <label className="input validator">
+            <input
+              type="text"
+              name="codigopos"
+              required
+              placeholder="Código Postal"
+              pattern="\d{5}"
+              value={formData.codigopos}
+              onChange={handleChange}
+            />
+          </label>
+          <p className="validator-hint">Debe tener 5 dígitos.</p>
+        </div>
+      </div>
 
-      {/* Teléfono */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g fill="none"><path d="M7.25 11.5C6.83579 11.5 6.5 11.8358 6.5 12.25C6.5 12.6642 6.83579 13 7.25 13H8.75C9.16421 13 9.5 12.6642 9.5 12.25C9.5 11.8358 9.16421 11.5 8.75 11.5H7.25Z" fill="currentColor"></path><path fillRule="evenodd" clipRule="evenodd" d="M6 1C4.61929 1 3.5 2.11929 3.5 3.5V12.5C3.5 13.8807 4.61929 15 6 15H10C11.3807 15 12.5 13.8807 12.5 12.5V3.5C12.5 2.11929 11.3807 1 10 1H6ZM10 2.5H9.5V3C9.5 3.27614 9.27614 3.5 9 3.5H7C6.72386 3.5 6.5 3.27614 6.5 3V2.5H6C5.44771 2.5 5 2.94772 5 3.5V12.5C5 13.0523 5.44772 13.5 6 13.5H10C10.5523 13.5 11 13.0523 11 12.5V3.5C11 2.94772 10.5523 2.5 10 2.5Z" fill="currentColor"></path></g></svg>
-
-        <input
-          type="tel"
-          name="phone"
-          required
-          pattern="\d{10}"
-          placeholder="Teléfono"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-      </label>
-      <p className="validator-hint">
-        Debe ser un número de teléfono válido (10 dígitos).
-      </p>
-
-      {/* RFC */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></g></svg>
-
-        <input
-          type="text"
-          name="rfc"
-          required
-          placeholder="RFC"
-          value={formData.rfc}
-          onChange={handleChange}
-          pattern="[A-Z]{4}\d{6}[A-Z0-9]{3}"
-        />
-      </label>
-      <p className="validator-hint">
-        Debe ser un RFC válido (4 letras, 6 dígitos y 3 caracteres alfanuméricos).
-      </p>
-
-      {/* Dirección */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M3 3h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M9.5 8.5h5v7h-5z"></path></g></svg>
-
-        <input
-          type="text"
-          name="address"
-          required
-          placeholder="Dirección"
-          value={formData.address}
-          onChange={handleChange}
-          pattern="[A-Za-z0-9.,# ]{5,100}"
-        />
-      </label>
-      <p className="validator-hint">
-        Debe tener entre 5 y 100 caracteres y puede contener letras, números y caracteres especiales.
-      </p>
-
-      {/* Código Postal */}
-      <label className="input validator mt-4">
-        <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><path d="M3 3h18a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M9.5 8.5h5v7h-5z"></path></g></svg>
-        <input
-          type="text"
-          name="postalCode"
-          required
-          placeholder="Código Postal"
-          value={formData.postalCode}
-          onChange={handleChange}
-          pattern="\d{5}"
-        />
-      </label>
-      <p className="validator-hint">
-        Debe ser un código postal válido (5 dígitos).
-      </p>
-
-      {/* Botón de Envío */}
-      <button className="btn custom-bg btn-wide mt-4" type="submit">
-        {isEditing ? "Guardar Cambios" : "Agregar Administrador"}
-      </button>
+      {/* Botón */}
+      <div className="mt-6">
+        <button type="submit" className="btn custom-bg btn-wide">
+          {isEditing ? "Guardar Cambios" : "Agregar Administrador"}
+        </button>
+      </div>
     </form>
   );
 };

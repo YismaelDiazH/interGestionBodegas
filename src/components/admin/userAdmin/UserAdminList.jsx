@@ -14,7 +14,7 @@ const UserAdminList = ({ users, onDelete }) => {
             <th>Nombre</th>
             <th>Apellido paterno</th>
             <th>Apellido materno</th>
-            <th>Email</th>
+            <th>Correo</th>
             <th>Teléfono</th>
             <th>RFC</th>
             <th>Dirección</th>
