@@ -43,11 +43,9 @@ export default function Navbar({ onOpen }) {
       </div>
 
       <div className="navbar-end flex gap-4 items-center mr-4">
-        
-
         {token ? (
           <>
-            {(rol === "SUPERADMINISTRADOR" ) && (
+            {rol === "SUPERADMINISTRADOR" && (
               <button
                 onClick={goToDashboardSuper}
                 className="btn btn-outline btn-primary"
@@ -55,7 +53,7 @@ export default function Navbar({ onOpen }) {
                 Dashboard
               </button>
             )}
-            {(rol === "ADMINISTRADOR") && (
+            {rol === "ADMINISTRADOR" && (
               <button
                 onClick={goToDashboardAdmin}
                 className="btn btn-outline btn-primary"

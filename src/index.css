@@ -1,17 +1,19 @@
+/* CORRECTO: Usa estas 3 directivas de Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Luego importa DaisyUI */
+@import "daisyui/dist/full.css";
 
+/* Tus variables personalizadas */
 :root {
-    --custom-color: orange; 
-  }
+  --custom-color: orange;
+}
 
-
-
-  .custom-bg {
-    background-color: var(--custom-color) !important;
-    color: white; 
-    mix-blend-mode: difference; 
-    border: 0cap;
-
-  }
-  @import "tailwindcss";@import "tailwindcss";
-  @plugin "daisyui";
+/* Tus estilos personalizados */
+.custom-bg {
+  background-color: var(--custom-color);
+  color: white;
+  border: none;
+}
