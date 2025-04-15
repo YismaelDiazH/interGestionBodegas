@@ -1,11 +1,12 @@
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui";
 
-@import "daisyui/dist/full.css";
-
+/* Tus variables personalizadas */
 :root {
   --custom-color: orange;
 }
 
+/* Tus estilos personalizados */
 .custom-bg {
   background-color: var(--custom-color);
   color: white;
