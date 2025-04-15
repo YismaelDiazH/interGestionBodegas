@@ -7,6 +7,28 @@ export default function PaymentsView() {
     clave: "",
     email: "",
   });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!paymentDetails.nombre.trim()) {
+      newErrors.nombre = "Nombre es requerido";
+    }
+    if (!paymentDetails.clave.trim()) {
+      newErrors.clave = "Clave SPEI es requerida";
+    } else if (paymentDetails.clave.length < 18) {
+      newErrors.clave = "Clave SPEI debe tener 18 dígitos";
+    }
+    if (!paymentDetails.email) {
+      newErrors.email = "Email es requerido";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentDetails.email)) {
+      newErrors.email = "Email no válido";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,43 +38,33 @@ export default function PaymentsView() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Pago realizado con SPEI:", paymentDetails);
-    // Aquí puedes integrar la lógica para procesar el pago con SPEI
+
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
+      console.log("Procesando pago con SPEI");
+      // await processPayment(paymentDetails);
+    } catch (error) {
+      console.error("Error en el pago:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div>
-      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
-        <h1 className="font-bold text-lg">PAGOS SIGEBO</h1>
-
-        {/* Menú en pantallas grandes */}
-        <nav className="hidden md:flex space-x-4">
-          <a href="/" className="hover:underline">
-            Inicio
-          </a>
-          <a href="ExpirationView" className="hover:underline">
-            Vencimiento
-          </a>
-          <a href="" className="hover:underline">
-            Pagos
-          </a>
-          <a href="/login" className="hover:underline">
-            Cerrar sesión
-          </a>
-        </nav>
-      </header>
-
+    <>
+      {/* Fondo fijo, detrás de todo */}
       <div
-        className="h-screen w-screen flex flex-col items-center relative"
-        style={{
-          backgroundImage: `url(${cop})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <h1 className="text-3xl font-bold text-orange-600 my-10 mt-45">
+        className="fixed inset-0 bg-cover bg-center z-0"
+        style={{ backgroundImage: `url(${cop})` }}
+      />
+
+      {/* Contenido normal, por encima del fondo */}
+      <div className="relative z-10 flex flex-col items-center min-h-screen pt-24">
+        <h1 className="text-3xl font-bold mb-10 bg-white px-6 py-3 rounded-lg shadow-lg text-black">
           Realiza tu pago con SPEI
         </h1>
 
@@ -61,8 +73,7 @@ export default function PaymentsView() {
             Detalles de pago
           </h2>
 
-          {/* Formulario de pago con SPEI */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="mb-4">
               <label
                 htmlFor="nombre"
@@ -76,9 +87,14 @@ export default function PaymentsView() {
                 name="nombre"
                 value={paymentDetails.nombre}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                className={`w-full px-4 py-2 border rounded-md ${
+                  errors.nombre ? "border-red-500" : "border-gray-300"
+                }`}
                 required
               />
+              {errors.nombre && (
+                <p className="text-red-500 text-xs mt-1">{errors.nombre}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -86,7 +102,7 @@ export default function PaymentsView() {
                 htmlFor="clave"
                 className="block text-sm font-semibold mb-2"
               >
-                Clave de SPEI
+                Clave de SPEI (18 dígitos)
               </label>
               <input
                 type="text"
@@ -94,12 +110,18 @@ export default function PaymentsView() {
                 name="clave"
                 value={paymentDetails.clave}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                maxLength="18"
+                className={`w-full px-4 py-2 border rounded-md ${
+                  errors.clave ? "border-red-500" : "border-gray-300"
+                }`}
                 required
               />
+              {errors.clave && (
+                <p className="text-red-500 text-xs mt-1">{errors.clave}</p>
+              )}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-6">
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold mb-2"
@@ -112,20 +134,28 @@ export default function PaymentsView() {
                 name="email"
                 value={paymentDetails.email}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                className={`w-full px-4 py-2 border rounded-md ${
+                  errors.email ? "border-red-500" : "border-gray-300"
+                }`}
                 required
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#FF7700] text-white py-2 rounded-md hover:bg-[#a77d4e]"
+              disabled={isSubmitting}
+              className={`w-full bg-[#FF7700] text-white py-2 rounded-md hover:bg-[#a77d4e] transition-colors ${
+                isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Realizar pago con SPEI
+              {isSubmitting ? "Procesando..." : "Realizar pago con SPEI"}
             </button>
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 }

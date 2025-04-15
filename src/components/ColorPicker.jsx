@@ -2,7 +2,7 @@
 import React from "react";
 import { useColor } from "../context/ColorContext";
 import { indigo } from "../context/ColorContext";
-
+//
 const ColorPicker = () => {
   const { color, changeColor } = useColor();
 

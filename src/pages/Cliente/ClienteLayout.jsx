@@ -1,25 +1,19 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../../components/admin/Navbar";
-import { div } from "framer-motion/client";
+//import { div } from "framer-motion/client";
 import SidebarCliente from "../../components/Wineries/SidebarCliente";
 const ClienteLayout = () => {
   return (
     <div className="flex h-screen bg-base-100">
-    
-    
-      <SidebarCliente /> 
-      
+      <SidebarCliente />
       <div className="flex-1 flex flex-col">
-       
         <Navbar />
-        
         <main className="flex-1 p-6">
-          <Outlet /> 
+          <Outlet />
         </main>
       </div>
     </div>
-
   );
 };
 
