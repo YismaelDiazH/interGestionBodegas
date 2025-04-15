@@ -7,7 +7,9 @@ const SidebarSede = () => {
 
   return (
     <div className={`h-screen custom-bg shadow-lg ${isOpen ? "w-52" : "w-20"} transition-all duration-300 p-4 flex flex-col`}>
-
+<br />
+      <br />
+      <br />
       <button 
         className="btn btn-square btn-ghost mb-4 self-end"
         onClick={() => setIsOpen(!isOpen)}

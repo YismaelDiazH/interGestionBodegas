@@ -6,8 +6,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Obtener datos de autenticación
   const token = localStorage.getItem("token");
-  const rol = localStorage.getItem("rol");
+  const user = token ? JSON.parse(localStorage.getItem("user") || "{}") : null;
+  const rol = user?.role || null;
   const theme = localStorage.getItem("theme-color") || "#FF7700";
 
   const handleLogout = () => {
@@ -22,6 +24,57 @@ export default function Navbar() {
   const goToLogin = () => navigate("/login");
   const goToRegister = () => navigate("/register");
 
+  // Función para renderizar botones según el rol
+  const renderAuthButtons = () => {
+    if (!token) {
+      return (
+        <>
+          <button onClick={goToLogin} className="btn">
+            Iniciar sesión
+          </button>
+          <button onClick={goToRegister} className="btn custom-bg">
+            Registrarse
+          </button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        {rol === "SUPERADMINISTRADOR" && (
+          <button
+            onClick={goToDashboardSuper}
+            className="btn btn-outline btn-primary"
+          >
+            Dashboard
+          </button>
+        )}
+        {rol === "ADMINISTRADOR" && (
+          <button
+            onClick={goToDashboardAdmin}
+            className="btn btn-outline btn-primary"
+          >
+            Dashboard
+          </button>
+        )}
+        {rol === "CLIENTE" && (
+          <button
+            onClick={goToRentar}
+            className="btn btn-outline btn-success"
+          >
+            Rentar
+          </button>
+        )}
+        <button
+          onClick={handleLogout}
+          className="btn btn-outline btn-error"
+        >
+          Cerrar sesión
+        </button>
+      </>
+    );
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full z-40 navbar bg-base-100 shadow-sm px-4">
       <div className="navbar-start">
@@ -30,7 +83,7 @@ export default function Navbar() {
         </a>
       </div>
 
-      {/* responsivo */}
+      {/* Menú mobile */}
       <div className="navbar-end lg:hidden">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -62,100 +115,16 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Menú horizontal en pantallas grandes */}
+      {/* Menú desktop */}
       <div className="hidden lg:flex navbar-end gap-4 items-center">
-        {token ? (
-          <>
-            {rol === "SUPERADMINISTRADOR" && (
-              <button
-                onClick={goToDashboardSuper}
-                className="btn btn-outline btn-primary"
-              >
-                Dashboard
-              </button>
-            )}
-            {rol === "ADMINISTRADOR" && (
-              <button
-                onClick={goToDashboardAdmin}
-                className="btn btn-outline btn-primary"
-              >
-                Dashboard
-              </button>
-            )}
-            {rol === "CLIENTE" && (
-              <button
-                onClick={goToRentar}
-                className="btn btn-outline btn-success"
-              >
-                Rentar
-              </button>
-            )}
-            <button
-              onClick={handleLogout}
-              className="btn btn-outline btn-error"
-            >
-              Cerrar sesión
-            </button>
-          </>
-        ) : (
-          <>
-            <button onClick={goToLogin} className="btn">
-              Iniciar sesión
-            </button>
-            <button onClick={goToRegister} className="btn custom-bg">
-              Registrarse
-            </button>
-          </>
-        )}
+        {renderAuthButtons()}
         <ColorPicker />
       </div>
 
-      {/* Menú desplegable en mobile */}
+      {/* Menú desplegable mobile */}
       {menuOpen && (
         <div className="absolute top-[4.5rem] right-4 z-50 bg-base-100 shadow-lg rounded-lg p-4 w-60 flex flex-col gap-2 lg:hidden">
-          {token ? (
-            <>
-              {rol === "SUPERADMINISTRADOR" && (
-                <button
-                  onClick={goToDashboardSuper}
-                  className="btn btn-outline btn-primary"
-                >
-                  Dashboard
-                </button>
-              )}
-              {rol === "ADMINISTRADOR" && (
-                <button
-                  onClick={goToDashboardAdmin}
-                  className="btn btn-outline btn-primary"
-                >
-                  Dashboard
-                </button>
-              )}
-              {rol === "CLIENTE" && (
-                <button
-                  onClick={goToRentar}
-                  className="btn btn-outline btn-success"
-                >
-                  Rentar
-                </button>
-              )}
-              <button
-                onClick={handleLogout}
-                className="btn btn-outline btn-error"
-              >
-                Cerrar sesión
-              </button>
-            </>
-          ) : (
-            <>
-              <button onClick={goToLogin} className="btn">
-                Iniciar sesión
-              </button>
-              <button onClick={goToRegister} className="btn custom-bg">
-                Registrarse
-              </button>
-            </>
-          )}
+          {renderAuthButtons()}
           <ColorPicker />
         </div>
       )}
