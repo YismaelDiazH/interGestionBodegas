@@ -1,48 +1,56 @@
-import { useState, useMemo } from "react";
-import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; 
-
-// Simulación de datos
-const bodegasSimuladas = [
-  { id: "B1", estado: "ocupada", estatusPago: "pagado", precio: 1500, edificio: "A", tamano: "chica", cliente: "Cliente A" },
-  { id: "B2", estado: "vacante", estatusPago: "pagado", precio: 0, edificio: "B", tamano: "mediana", cliente: "Cliente B" },
-  { id: "B3", estado: "ocupada", estatusPago: "impago", precio: 1800, edificio: "C", tamano: "grande", cliente: "Cliente C" },
-  { id: "B4", estado: "ocupada", estatusPago: "pagado", precio: 2200, edificio: "A", tamano: "mediana", cliente: "Cliente D" },
-  { id: "B5", estado: "ocupada", estatusPago: "impago", precio: 2100, edificio: "B", tamano: "chica", cliente: "Cliente E" },
-];
+import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const DashboardAdministrador = () => {
   const [bodegas, setBodegas] = useState([]);
   const [filtroEdificio, setFiltroEdificio] = useState("");
   const [filtroTamano, setFiltroTamano] = useState("");
+  const [nombreSede, setNombreSede] = useState("");
 
+  useEffect(() => {
+    const obtenerSedeDelUsuario = async () => {
+      try {
+        const usuario = JSON.parse(localStorage.getItem("user"));
+        const correo = usuario?.sub;
+  
+        if (!correo) return;
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:8080/api/sedes/usuario/correo/${correo}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("No se pudo obtener la sede");
+        }
+  
+        const sede = await response.json();
+        setNombreSede(sede.nombre);
+        localStorage.setItem("sedeId", sede.id);
+        localStorage.setItem("sedeName",sede.nombre);
+      } catch (error) {
+        console.error("Error al obtener la sede:", error.message);
+      }
+    };
+  
+    obtenerSedeDelUsuario();
+  }, []);
+  
   useEffect(() => {
     const obtenerBodegas = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/bodega/");
-        setBodegas(response.data);
+        const response = await fetch("http://localhost:8080/api/bodegas/");
+        if (!response.ok) {
+          throw new Error("Error al obtener las bodegas");
+        }
+        const data = await response.json();
+        setBodegas(data);
       } catch (error) {
-        console.error("Error al obtener las bodegas:", error);
+        console.error("Error:", error.message);
       }
     };
     obtenerBodegas();
-  }, []);
-
- 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/bodegas/") 
-      .then((response) => {
-        setBodegas(response.data);
-      })
-      .catch((error) => {
-        console.error("Error al obtener las bodegas:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Hubo un problema al cargar las bodegas.",
-        });
-      });
   }, []);
 
   const bodegasFiltradas = useMemo(() => {
@@ -73,70 +81,31 @@ const DashboardAdministrador = () => {
 
   const notificarCliente = async (idBodega) => {
     try {
-      await axios.put(`http://localhost:8080/api/bodegas/${idBodega}`, {
-        estatusPago: "pagado", // Actualizamos el estatus de pago
+      const response = await fetch(`http://localhost:8080/api/bodegas/${idBodega}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ estatusPago: "pagado" }),
       });
-      Swal.fire({
-        icon: "info",
-        title: `Notificación enviada`,
-        text: `Se ha notificado al cliente de la bodega ${idBodega}.`,
-      });
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar el estatus de pago");
+      }
+
+      console.log(`Notificación enviada a cliente de la bodega ${idBodega}`);
     } catch (error) {
-      console.error("Error al notificar al cliente:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo notificar al cliente.",
-      });
+      console.error("Error:", error.message);
     }
   };
 
   return (
     <div className="p-8 w-full min-h-screen bg-gray-100">
       <h1 className="text-3xl font-bold text-orange-500 mb-6">
-        Dashboard del Administrador
+        Dashboard {nombreSede}
       </h1>
+      
 
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex gap-4">
-          <select
-            className="p-3 rounded-lg border border-gray-300 bg-white font-semibold text-gray-700 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
-            value={filtroEdificio}
-            onChange={(e) => setFiltroEdificio(e.target.value)}
-          >
-            <option value="">Todos los edificios</option>
-            <option value="A">Edificio A</option>
-            <option value="B">Edificio B</option>
-            <option value="C">Edificio C</option>
-          </select>
-          <select
-            className="p-3 rounded-lg border border-gray-300 bg-white font-semibold text-gray-700 focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
-            value={filtroTamano}
-            onChange={(e) => setFiltroTamano(e.target.value)}
-          >
-            <option value="">Todos los tamaños</option>
-            <option value="chica">Chica</option>
-            <option value="mediana">Mediana</option>
-            <option value="grande">Grande</option>
-          </select>
-        </div>
-
-        <div className="flex gap-4">
-          <Link to="/sedes/vistabodega">
-            <button className="flex items-center justify-center p-3 bg-orange-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
-              Lista de Bodegas
-            </button>
-          </Link>
-
-          <Link to="/sedes/vistacliente">
-            <button className="flex items-center justify-center p-3 bg-orange-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
-              Lista de Clientes
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Métricas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <MetricCard
           titulo="Ingresos Totales"
@@ -227,7 +196,7 @@ const MetricCard = ({ titulo, valor, color }) => {
 
   return (
     <div
-      className={`p-6 bg-${color}-200 rounded-lg shadow-lg text-center text-lg font-semibold ${colorClass[color]}`}
+      className={`p-6 bg-${color}-200 rounded-lg shadow-lg text-center text-lg font-semibold ${colorClass}`}
     >
       <p>{titulo}</p>
       <p className="text-2xl font-bold">{valor}</p>

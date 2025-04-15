@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import back from "./img/cop.jpg";
 import media from "./img/media.png";
 import front from "./img/front.png";
+import Navbar from "../admin/Navbar";
 
 function parseJwt(token) {
   try {
@@ -71,7 +72,7 @@ export default function LoginView() {
           window.location.href = "/admin/";
           break;
         case "ADMINISTRADOR":
-          window.location.href = "/sedes/dashboard";
+          window.location.href = "/sedes/";
           break;
         case "CLIENTE":
           window.location.href = "/ExpirationView";
@@ -91,6 +92,9 @@ export default function LoginView() {
   };
 
   return (
+    <>
+    <Navbar/>
+
     <div
       className="h-screen w-screen flex items-center justify-center relative"
       style={{
@@ -99,27 +103,7 @@ export default function LoginView() {
         backgroundPosition: "center",
       }}
     >
-      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
-        <h1 className="font-bold text-lg">BODEGAS SIGEBO</h1>
 
-        {/* Menú en pantallas grandes */}
-        <nav className="hidden md:flex space-x-4">
-          <a href="/" className="hover:underline">
-            Inicio
-          </a>
-          <a href="/login" className="hover:underline">
-            Iniciar sesión
-          </a>
-
-          {/* Definir las rutas dentro del componente */}
-
-          <a href="/#contact-link" className="hover:underline">
-            Contacto
-          </a>
-        </nav>
-
-        {/* Botón de menú en móviles */}
-      </header>
 
       <div className="flex w-4/7 max-w-4xl gap-8">
         <div className="flex flex-col items-center w-2/5">
@@ -130,7 +114,7 @@ export default function LoginView() {
               className="md:h-20 h-8 object-contain mx-auto mb-10"
             />
 
-            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+            {error && <p className="custom-bg text-center mb-4">{error}</p>}
 
             <form onSubmit={handleSubmit}>
               <input
@@ -148,17 +132,9 @@ export default function LoginView() {
                 className="w-full border border-gray-300 rounded-sm p-2 mb-4 focus:outline-none"
               />
 
-              {/*   
-              <button
-                type="submit"
-                className="w-full bg-[#FF7700] text-white py-2 rounded-md mb-4 hover:bg-[#a77d4e]"
-              >
-                Entrar
-              </button>
-*/}
 
               <button type="submit"
-                className="w-full bg-[#FF7700] text-white py-2 rounded-md mb-4 block text-center hover:bg-[#a77d4e]"
+                className="w-full custom-bg text-white py-2 rounded-md mb-4 block text-center hover:bg-[#a77d4e]"
               >
                 Entrar
               </button>
@@ -176,7 +152,7 @@ export default function LoginView() {
 
           <div className="bg-white rounded-md p-4 mt-4 w-full text-center shadow-sm text-sm text-gray-600">
             ¿No tienes una cuenta?{" "}
-            <a href="/register" className="text-[#FF7700] hover:underline">
+            <a href="/register" className="custom-bg hover:underline">
               Regístrate
             </a>
           </div>
@@ -193,5 +169,6 @@ export default function LoginView() {
         </div>
       </div>
     </div>
+    </>
   );
 }

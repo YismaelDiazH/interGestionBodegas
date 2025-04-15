@@ -21,13 +21,12 @@ const UserAdminForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 🔄 Cargar datos del usuario desde el backend si es edición
   useEffect(() => {
     const fetchUser = async () => {
       if (isEditing) {
         setLoading(true);
         try {
-          const response = await fetch(`http://localhost:8080/api/usuarios/${id}`);
+          const response = await fetch(`http://localhost:8080/api/usuarios/id/${id}`);
           if (!response.ok) throw new Error("No se pudo obtener el usuario");
           const data = await response.json();
           setFormData({
@@ -145,7 +144,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Debe tener entre 3 y 50 caracteres.</p>
         </div>
 
-        {/* Apellido Materno */}
         <div>
           <label className="input validator">
             <input
@@ -161,7 +159,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Debe tener entre 3 y 50 caracteres.</p>
         </div>
 
-        {/* Correo */}
         <div>
           <label className="input validator">
             <input
@@ -177,7 +174,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Debe ser un correo válido.</p>
         </div>
 
-        {/* Teléfono */}
         <div>
           <label className="input validator">
             <input
@@ -193,7 +189,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Debe tener 10 dígitos.</p>
         </div>
 
-        {/* RFC */}
         <div>
           <label className="input validator">
             <input
@@ -209,7 +204,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Debe ser un RFC válido.</p>
         </div>
 
-        {/* Dirección */}
         <div>
           <label className="input validator">
             <input
@@ -225,7 +219,6 @@ const UserAdminForm = () => {
           <p className="validator-hint">Entre 5 y 100 caracteres.</p>
         </div>
 
-        {/* Código Postal */}
         <div>
           <label className="input validator">
             <input
@@ -242,7 +235,6 @@ const UserAdminForm = () => {
         </div>
       </div>
 
-      {/* Botón */}
       <div className="mt-6">
         <button type="submit" className="btn custom-bg btn-wide">
           {isEditing ? "Guardar Cambios" : "Agregar Administrador"}

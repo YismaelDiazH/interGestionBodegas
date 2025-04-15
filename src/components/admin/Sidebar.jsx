@@ -8,7 +8,6 @@ const Sidebar = () => {
 
   return (
     <div className={`h-screen  custom-bg  shadow-lg  ${isOpen ? "w-52" : "w-20"} transition-all duration-300 p-4 flex flex-col`}>
-      {/* Botón para expandir/cerrar */}
       <button 
         className="btn btn-square btn-ghost b-4 self-end"
         onClick={() => setIsOpen(!isOpen)}
@@ -16,7 +15,6 @@ const Sidebar = () => {
         {isOpen ? "←" : "→"}
       </button>
 
-      {/* Menú de navegación */}
       <ul className="menu p-0 space-y-2">
         <li>
           <Link to="/admin/" className="flex items-center gap-2">

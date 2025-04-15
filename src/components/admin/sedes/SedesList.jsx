@@ -8,18 +8,18 @@ const SedesList = ({ sedes, onDelete }) => {
   // Manejo de la eliminación de sede
   const handleDeleteClick = (id) => {
     setSedeToDelete(id);
-    document.getElementById('my_modal_2').showModal(); // Abre el modal
+    document.getElementById("my_modal_2").showModal(); // Abre el modal
   };
 
   const handleDeleteConfirm = () => {
     onDelete(sedeToDelete); // Llama la función onDelete pasada como props
     setSedeToDelete(null);
-    document.getElementById('my_modal_2').close(); // Cierra el modal
+    document.getElementById("my_modal_2").close(); // Cierra el modal
   };
 
   const handleDeleteCancel = () => {
     setSedeToDelete(null);
-    document.getElementById('my_modal_2').close(); // Cierra el modal
+    document.getElementById("my_modal_2").close(); // Cierra el modal
   };
 
   return (
@@ -41,7 +41,14 @@ const SedesList = ({ sedes, onDelete }) => {
                 <th>{index + 1}</th>
                 <td>{sede.nombre}</td>
                 <td>{sede.direccion}</td>
-                <td>{sede.administrador}</td>
+                <td>
+                  {Array.isArray(sede.administradores)
+                    ? sede.administradores
+                        .map((admin) => admin.nombre)
+                        .join(", ")
+                    : "—"}
+                </td>
+                
                 <td>
                   {/* Botón Editar */}
                   <button
@@ -74,10 +81,22 @@ const SedesList = ({ sedes, onDelete }) => {
       {/* Modal de confirmación de eliminación */}
       <dialog id="my_modal_2" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">¿Estás seguro de eliminar esta sede?</h3>
+          <h3 className="font-bold text-lg">
+            ¿Estás seguro de eliminar esta sede?
+          </h3>
           <div className="py-4">
-            <button className="btn btn-sm btn-outline btn-danger mr-2" onClick={handleDeleteConfirm}>Confirmar</button>
-            <button className="btn btn-sm btn-outline btn-secondary" onClick={handleDeleteCancel}>Cancelar</button>
+            <button
+              className="btn btn-sm btn-outline btn-danger mr-2"
+              onClick={handleDeleteConfirm}
+            >
+              Confirmar
+            </button>
+            <button
+              className="btn btn-sm btn-outline btn-secondary"
+              onClick={handleDeleteCancel}
+            >
+              Cancelar
+            </button>
           </div>
         </div>
       </dialog>

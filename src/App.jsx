@@ -6,50 +6,63 @@ import {
   useLocation,
 } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import NotFoundView from "./components/NotFoundView";
 
-// Rutas por rol
 import SedeAdminRoutes from "./routes/SedesAdminRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 
-// Vistas
 import MainView from "./components/MainPage/MainView";
 import LoginView from "./components/Login/LoginView";
 import RegistrationView from "./components/Registration/RegistrationView";
 import Password from "./components/Registration/Password";
 import WineriesView from "./components/Wineries/WineriesView";
 
-// Contexto (si lo tienes)
-//import { ColorProvider } from "./context/ColorContext";
-
 import "./App.css";
 import PaymentsView from "./components/Registration/PaymentsView";
 import ExpirationView from "./components/Registration/ExpirationView";
 
-// Simulación del rol actual (puedes cambiarlo según lógica real)
-const userRole = "sede"; // "admin" o "sede"
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch (e) {
+    return null;
+  }
+}
+
+const getUserRole = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  const payload = parseJwt(token);
+  return payload?.role || null;
+};
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const userRole = getUserRole();
 
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Rutas  */}
         <Route path="/" element={<MainView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/register" element={<RegistrationView />} />
         <Route path="/lost-password" element={<Password />} />
-        <Route path="/wineries" element={<WineriesView />} />
-        <Route path="/PaymentsViews" element={<PaymentsView />} />
-        <Route path="/ExpirationView" element={<ExpirationView />} />
-
-        {/* Rutas por rol */}
-        {userRole === "admin" && (
+        {userRole === "CLIENTE" ? (
+          <Route path="/" element={<MainView />}>
+            <Route path="wineries" element={<WineriesView />} />
+            <Route path="PaymentsViews" element={<PaymentsView />} />
+            <Route path="ExpirationView" element={<ExpirationView />} />
+            <Route path="*" element={<NotFoundView />} />
+          </Route>
+        ) : null}
+        {userRole === "SUPERADMINISTRADOR" ? (
           <Route path="/admin/*" element={<AdminRoutes />} />
-        )}
-        {userRole === "sede" && (
+        ) : null}
+        {userRole === "ADMINISTRADOR" ? (
           <Route path="/sedes/*" element={<SedeAdminRoutes />} />
-        )}
+        ) : null}
+
+        <Route path="*" element={<NotFoundView />} />
       </Routes>
     </AnimatePresence>
   );

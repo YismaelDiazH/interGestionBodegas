@@ -9,6 +9,7 @@ import blur from "./img/blur.png";
 import camera from "./img/camera.png";
 import clean from "./img/clean.png";
 import drop from "./img/drop.png";
+import Navbar from "../admin/Navbar";
 
 export default function MainView() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,53 +27,8 @@ export default function MainView() {
   ];
   return (
     <div className="w-full font-sans">
-      {/* Header */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
-        <h1 className="font-bold text-lg">BODEGAS SIGEBO</h1>
-
-        {/* Menú en pantallas grandes */}
-        <nav className="hidden md:flex space-x-4">
-          <a href="/" className="hover:underline">
-            Inicio
-          </a>
-          <a href="/login" className="hover:underline">
-            Iniciar sesión
-          </a>
-
-          {/* Definir las rutas dentro del componente */}
-
-          <a href="#contact-link" className="hover:underline">
-            Contacto
-          </a>
-        </nav>
-
-        {/* Botón de menú en móviles */}
-        <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-          <Menu size={28} />
-        </button>
-
-        {/* Menú lateral en móviles */}
-        <div
-          className={`fixed top-0 right-0 h-full w-64 bg-black p-6 shadow-lg transform ${
-            menuOpen ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out`}
-        >
-          <button
-            className="absolute top-4 right-4"
-            onClick={() => setMenuOpen(false)}
-          >
-            <X size={28} />
-          </button>
-          <nav className="mt-10 flex flex-col space-y-4">
-            <a href="/login" className="hover:underline">
-              Iniciar sesión
-            </a>
-            <a href="#contact-link" className="hover:underline">
-              Contacto
-            </a>
-          </nav>
-        </div>
-      </header>
+      
+      <Navbar></Navbar>
       {/* Hero Section */}
       <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
         {/* Overlay oscuro */}

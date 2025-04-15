@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const SedeForm = ({ sedes }) => {
+const SedeForm = ({ sedes, usuarios }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = id !== undefined;
 
-  const initialState = { nombre: "", direccion: "", administrador: "" };
+  const initialState = {
+    nombre: "",
+    direccion: "",
+    administradores: [],
+  };
   const [formData, setFormData] = useState(initialState);
+  const [administradores, setAdministradores] = useState([]);
 
   useEffect(() => {
-    if (isEditing && sedes) {
-      const sedeToEdit = sedes.find((sede) => sede.id === parseInt(id));
-      if (sedeToEdit) {
-        setFormData(sedeToEdit);
+    const fetchAdministradores = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/usuarios/");
+        const data = await res.json();
+        const soloAdmins = data.filter((u) => u.rol === "ADMINISTRADOR");
+        setAdministradores(soloAdmins);
+      } catch (err) {
+        console.error("Error al cargar administradores:", err);
       }
-    }
-  }, [id, sedes]);
+    };
+
+    fetchAdministradores();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,13 +43,16 @@ const SedeForm = ({ sedes }) => {
     const method = isEditing ? "PUT" : "POST";
 
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const token = localStorage.getItem("token"); // o desde contexto
+
+const response = await fetch(url, {
+  method,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`, // <--- Aquí el token
+  },
+  body: JSON.stringify(formData),
+});
 
       if (!response.ok) {
         throw new Error("Error al guardar la sede");
@@ -52,7 +66,10 @@ const SedeForm = ({ sedes }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-base-100 rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit}
+      className="p-6 bg-base-100 rounded-lg shadow-md"
+    >
       <h2 className="text-xl font-bold mb-4">
         {isEditing ? "Editar Sede" : "Nueva Sede"}
       </h2>
@@ -124,37 +141,29 @@ const SedeForm = ({ sedes }) => {
       </label>
       <p className="validator-hint">Ingrese la ubicación de la sede.</p>
 
-      {/* Administrador de la Sede */}
-      <label className="input validator mb-4">
-        <svg
-          className="h-[1em] opacity-50"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-        >
-          <g
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            strokeWidth="2.5"
-            fill="none"
-            stroke="currentColor"
-          >
-            <path d="M12 2a10 10 0 1 1-7.07 2.93A10 10 0 0 1 12 2z"></path>
-            <path d="M12 6v6h6"></path>
-          </g>
-        </svg>
-        <input
-          type="text"
-          name="administrador"
-          required
-          placeholder="Administrador de la Sede"
-          pattern="[0-9]+"
-          title="Debe ser el ID del administrador"
-          value={formData.administrador}
-          onChange={handleChange}
-        />
-      </label>
-      <p className="validator-hint">
-        Debe tener entre 3 y 50 caracteres y solo contener letras.
+      <label className="block font-medium mb-2">Administradores</label>
+      <select
+        multiple
+        name="administradores"
+        value={formData.administradores}
+        onChange={(e) => {
+          const selected = Array.from(e.target.selectedOptions, (option) =>
+            parseInt(option.value)
+          );
+          setFormData({ ...formData, administradores: selected });
+        }}
+        className="w-full h-40 border rounded p-2 appearance-none bg-white"
+
+      >
+        {administradores.map((admin) => (
+          <option key={admin.id} value={admin.id}>
+            {admin.nombre}
+          </option>
+        ))}
+      </select>
+
+      <p className="text-sm text-gray-500">
+        Usa Ctrl (Windows) o Cmd (Mac) para seleccionar varios.
       </p>
 
       {/* Botón de Envío */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import Dashboard from "../pages/Admin/DashboardPage";
@@ -6,20 +6,27 @@ import SedeForm from "../components/admin/sedes/SedeForm";
 import UserAdminForm from "../components/admin/userAdmin/UserAdminForm";
 import UserAdminPage from "../pages/Admin/UserAdminPage";
 import SedePage from "../pages/Admin/SedePage";
+import NotFoundView from "../components/NotFoundView";
 
 const AdminRoutes = () => {
   const [administradores, setAdministradores] = useState([]);
+  const [sedes, setSedes] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
 
   return (
     <Routes>
       <Route path="/" element={<AdminLayout />}>
-        {/* Dashboard Global */}
         <Route path="" element={<Dashboard />} />
-        {/* Gestión de Sedes */}
         <Route path="sedes" element={<SedePage />} />
-        <Route path="sedes/new" element={<SedeForm />} />
-        <Route path="sedes/edit/:id" element={<SedeForm />} />
-        {/* Gestión de Administradores */}
+        <Route
+          path="sedes/new"
+          element={<SedeForm sedes={sedes} usuarios={usuarios} />}
+        />
+        <Route
+          path="sedes/edit/:id"
+          element={<SedeForm sedes={sedes} usuarios={usuarios} />}
+        />
+
         <Route
           path="administradores"
           element={
@@ -30,8 +37,8 @@ const AdminRoutes = () => {
           }
         />
         <Route path="administradores/new" element={<UserAdminForm />} />
-        <Route path="administradores/edit/:id" element={<UserAdminForm  />} />
-        {/* Reportes y Notificaciones */}+
+        <Route path="administradores/edit/:id" element={<UserAdminForm />} />
+        <Route path="*" element={<NotFoundView />} />
       </Route>
     </Routes>
   );
