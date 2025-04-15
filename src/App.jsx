@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import NotFoundView from "./components/NotFoundView";
-
+import ClienteRoutes from "./routes/ClienteRoutes";
 import SedeAdminRoutes from "./routes/SedesAdminRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 
@@ -48,13 +48,9 @@ const AnimatedRoutes = () => {
         <Route path="/register" element={<RegistrationView />} />
         <Route path="/lost-password" element={<Password />} />
         {userRole === "CLIENTE" ? (
-          <Route path="/" element={<MainView />}>
-            <Route path="wineries" element={<WineriesView />} />
-            <Route path="PaymentsViews" element={<PaymentsView />} />
-            <Route path="ExpirationView" element={<ExpirationView />} />
-            <Route path="*" element={<NotFoundView />} />
-          </Route>
+          <Route path="/renta/*" element={<ClienteRoutes />} />
         ) : null}
+
         {userRole === "SUPERADMINISTRADOR" ? (
           <Route path="/admin/*" element={<AdminRoutes />} />
         ) : null}

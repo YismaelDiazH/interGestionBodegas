@@ -43,26 +43,8 @@ export default function ExpirationView() {
   };
 
   return (
-    <div>
-      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
-        <h1 className="font-bold text-lg">VENCIMIENTO DE BODEGAS</h1>
-
-        {/* Menú en pantallas grandes */}
-        <nav className="hidden md:flex space-x-4">
-          <a href="/" className="hover:underline">
-            Inicio
-          </a>
-          <a href="/ExpirationView" className="hover:underline">
-            Vencimiento
-          </a>
-          <a href="/PaymentsViews" className="hover:underline">
-            Pagos
-          </a>
-          <a href="/login" className="hover:underline">
-            Cerrar sesión
-          </a>
-        </nav>
-      </header>
+   
+    
 
       <div
         className="h-screen w-screen flex flex-col items-center relative"
@@ -110,6 +92,5 @@ export default function ExpirationView() {
           </table>
         </div>
       </div>
-    </div>
   );
 }

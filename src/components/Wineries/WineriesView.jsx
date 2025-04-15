@@ -1,97 +1,154 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import cop from "./img/cop.jpg";
 
-export default function WineriesView() {
-  const bodegas = [
-    {
-      id: 1,
-      nombre: "Bodega 13B",
-      precio: "5045",
-      ubicacion: "Temixco",
-      tamano: "Grande",
-    },
-    {
-      id: 2,
-      nombre: "Bodega 2C",
-      precio: "6000",
-      ubicacion: "Zapata",
-      tamano: "Mediana",
-    },
-    {
-      id: 3,
-      nombre: "Bodega 14A",
-      precio: "4500",
-      ubicacion: "Cuernavaca",
-      tamano: "Pequeña",
-    },
-    {
-      id: 4,
-      nombre: "Bodega 7B",
-      precio: "7000",
-      ubicacion: "Jiutepec",
-      tamano: "Grande",
-    },
-  ];
+export default function BodegasPorSedeView() {
+  const [bodegas, setBodegas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sedeInfo, setSedeInfo] = useState(null);
+  const { sedeId } = useParams();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Obtener información de la sede
+        const sedeResponse = await fetch(`http://localhost:8080/api/sedes/id/${sedeId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!sedeResponse.ok) throw new Error("Error al obtener información de la sede");
+        const sedeData = await sedeResponse.json();
+        setSedeInfo(sedeData);
+
+        // Obtener bodegas de la sede
+        const bodegasResponse = await fetch("http://localhost:8080/api/bodegas/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!bodegasResponse.ok) throw new Error("Error al obtener las bodegas");
+        const allBodegas = await bodegasResponse.json();
+        
+        // Filtrar bodegas por sede (asumiendo que cada bodega tiene un objeto sede con id)
+        const bodegasFiltradas = allBodegas.filter(bodega => 
+          bodega.sede && bodega.sede.id === parseInt(sedeId)
+        );
+        
+        setBodegas(bodegasFiltradas);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [sedeId, token]);
+
+  const handleRentar = (bodegaId) => {
+    navigate(`/rentar/${bodegaId}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-orange-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-red-500 text-xl">{error}</div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      {" "}
-      <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 text-white flex justify-between items-center">
-        <h1 className="font-bold text-lg">BODEGAS SIGEBO</h1>
-
-        {/* Menú en pantallas grandes */}
-        <nav className="hidden md:flex space-x-4">
-          <a href="/" className="hover:underline">
-            Inicio
-          </a>
-
-          <a href="/ExpirationView" className="hover:underline">
-            vencimiento
-          </a>
-          <a href="/PaymentsViews" className="hover:underline">
-            Pagos
-          </a>
-          <a href="/login" className="hover:underline">
-            Cerrar sesión
-          </a>
-
-          {/* Definir las rutas dentro del componente */}
-        </nav>
-
-        {/* Botón de menú en móviles */}
-      </header>
-      <div
-        className="h-screen w-screen flex flex-col items-center relative"
-        style={{
-          backgroundImage: `url(${cop})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <h1 className="text-3xl font-bold text-orange-600 my-10 mt-45">
-          Bodegas disponibles
+    <div
+      className="min-h-screen w-full flex flex-col items-center py-10 relative"
+      style={{
+        backgroundImage: `url(${cop})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed"
+      }}
+    >
+      <div className="text-center mb-8 bg-white p-4 rounded-lg shadow-md">
+        <h1 className="text-3xl font-bold text-orange-600">
+          Bodegas Disponibles
         </h1>
+        {sedeInfo && (
+          <h2 className="text-xl text-gray-700 mt-2">
+            Sede: {sedeInfo.nombre} - {sedeInfo.direccion}
+          </h2>
+        )}
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-10">
+      {bodegas.length === 0 ? (
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+          <p className="text-xl text-gray-700">No hay bodegas disponibles en esta sede</p>
+          <button 
+            onClick={() => navigate(-1)}
+            className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Volver a sedes
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 w-full max-w-6xl">
           {bodegas.map((bodega) => (
             <div
               key={bodega.id}
-              className="bg-white rounded-lg shadow-md p-16 text-center"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
-              <h2 className="text-lg font-semibold">{bodega.nombre}</h2>
-              <p className="text-2xl font-bold">${bodega.precio}</p>
-              <ul className="text-sm text-gray-600 my-4">
-                <li>{bodega.ubicacion}</li>
-                <li>{bodega.tamano}</li>
-                <li>Bodega</li>
-              </ul>
-              <button className="bg-[#FF7700] text-white py-2 px-4 rounded-md">
-                Rentar
-              </button>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <h2 className="text-2xl font-bold text-gray-800">{bodega.nombre || `Bodega ${bodega.folio}`}</h2>
+                  <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full uppercase font-semibold">
+                    {bodega.status || "Disponible"}
+                  </span>
+                </div>
+
+                <div className="mb-6">
+                  <p className="text-3xl font-bold text-orange-600 mb-2">
+                    ${bodega.precio?.toLocaleString() || "0"} MXN
+                  </p>
+                  <p className="text-gray-600 mb-1">
+                    <span className="font-semibold">Tamaño:</span> {bodega.tamano}
+                  </p>
+                  <p className="text-gray-600">
+                    <span className="font-semibold">Folio:</span> {bodega.folio}
+                  </p>
+                </div>
+
+                {bodega.descripcion && (
+                  <p className="text-gray-700 mb-6 border-t pt-4">
+                    {bodega.descripcion}
+                  </p>
+                )}
+
+                <button
+                  onClick={() => handleRentar(bodega.id)}
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300"
+                >
+                  Rentar Bodega
+                </button>
+              </div>
             </div>
           ))}
         </div>
-      </div>
+      )}
     </div>
   );
 }

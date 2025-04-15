@@ -75,7 +75,7 @@ export default function LoginView() {
           window.location.href = "/sedes/";
           break;
         case "CLIENTE":
-          window.location.href = "/ExpirationView";
+          window.location.href = "/renta/";
           break;
         default:
           setError("Rol no reconocido.");
