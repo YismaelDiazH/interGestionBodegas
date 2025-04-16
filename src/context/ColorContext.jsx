@@ -1,9 +1,7 @@
-// src/context/ColorContext.js
 import React, { createContext, useState, useContext, useEffect } from "react";
 
 const ColorContext = createContext();
 
-// Variables de color individuales
 export const green = "#22c55e";
 export const red = "#ef4444";
 export const purple = "#8b5cf6";

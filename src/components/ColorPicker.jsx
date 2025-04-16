@@ -6,7 +6,6 @@ const colorOptions = [
   { name: "Rosa", value: "pink", bg: "#ec4899" },
   { name: "Cyan", value: "cyan", bg: "#06b6d4" },
   { name: "Verde", value: "green", bg: "#22c55e" },
-  { name: "Verde Neon", value: "lime", bg: "#84cc16" },
   { name: "Azul", value: "blue", bg: "#3b82f6" },
   { name: "Rojo", value: "red", bg: "#ef4444" },
   { name: "Indigo", value: "indigo", bg: "#6366f1" },
@@ -16,8 +15,7 @@ const colorOptions = [
   { name: "Amber", value: "amber", bg: "#f59e0b" },
   { name: "Emeralda", value: "emerald", bg: "#10b981" },
   { name: "Fuchsia", value: "fuchsia", bg: "#d946ef" },
-  { name: "Bosque", value: "teal", bg: "#14b8a6" },
-  { name: "Cafe", value: "brown", bg: "#92400e" },
+  { name: "Cafe", value: "brown", bg: "#a18262" },
 ];
 
 const ColorPicker = () => {

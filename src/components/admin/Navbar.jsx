@@ -6,7 +6,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Obtener datos de autenticación
   const token = localStorage.getItem("token");
   const user = token ? JSON.parse(localStorage.getItem("user") || "{}") : null;
   const rol = user?.role || null;
@@ -24,7 +23,6 @@ export default function Navbar() {
   const goToLogin = () => navigate("/login");
   const goToRegister = () => navigate("/register");
 
-  // Función para renderizar botones según el rol
   const renderAuthButtons = () => {
     if (!token) {
       return (
@@ -58,17 +56,11 @@ export default function Navbar() {
           </button>
         )}
         {rol === "CLIENTE" && (
-          <button
-            onClick={goToRentar}
-            className="btn btn-outline btn-success"
-          >
+          <button onClick={goToRentar} className="btn btn-outline btn-success">
             Rentar
           </button>
         )}
-        <button
-          onClick={handleLogout}
-          className="btn btn-outline btn-error"
-        >
+        <button onClick={handleLogout} className="btn btn-outline btn-error">
           Cerrar sesión
         </button>
       </>
@@ -83,7 +75,6 @@ export default function Navbar() {
         </a>
       </div>
 
-      {/* Menú mobile */}
       <div className="navbar-end lg:hidden">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -115,13 +106,11 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Menú desktop */}
       <div className="hidden lg:flex navbar-end gap-4 items-center">
         {renderAuthButtons()}
         <ColorPicker />
       </div>
 
-      {/* Menú desplegable mobile */}
       {menuOpen && (
         <div className="absolute top-[4.5rem] right-4 z-50 bg-base-100 shadow-lg rounded-lg p-4 w-60 flex flex-col gap-2 lg:hidden">
           {renderAuthButtons()}

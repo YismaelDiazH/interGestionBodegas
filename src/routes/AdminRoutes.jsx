@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "../pages/Admin/AdminLayout";
 import Dashboard from "../pages/Admin/DashboardPage";
@@ -10,8 +10,8 @@ import NotFoundView from "../components/NotFoundView";
 
 const AdminRoutes = () => {
   const [administradores, setAdministradores] = useState([]);
-  const [sedes, setSedes] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
+  const [sedes] = useState([]);
+  const [usuarios] = useState([]);
 
   return (
     <Routes>

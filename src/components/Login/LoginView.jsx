@@ -7,7 +7,7 @@ import Navbar from "../admin/Navbar";
 function parseJwt(token) {
   try {
     return JSON.parse(atob(token.split(".")[1]));
-  } catch (e) {
+  } catch {
     return null;
   }
 }
@@ -29,9 +29,9 @@ export default function LoginView() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000); // Cambiar la imagen cada 4 segundos
+    }, 4000);
 
-    return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -66,7 +66,6 @@ export default function LoginView() {
       const role = payload?.role;
       localStorage.setItem("user", JSON.stringify(payload));
 
-      // Redirección por rol
       switch (role) {
         case "SUPERADMINISTRADOR":
           window.location.href = "/admin/";
@@ -156,7 +155,6 @@ export default function LoginView() {
             </div>
           </div>
 
-          {/* Carrusel - Oculto en móviles */}
           <div className="w-full md:w-2/5 hidden md:flex items-center justify-center relative">
             <div className="relative w-full h-full">
               <img

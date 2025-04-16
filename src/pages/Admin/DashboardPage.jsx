@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MdAttachMoney, MdPeople, MdShoppingCart, MdBusiness, MdStorage } from "react-icons/md";
+import {
+  MdAttachMoney,
+  MdPeople,
+  MdShoppingCart,
+  MdBusiness,
+  MdStorage,
+} from "react-icons/md";
 import DashboardCard from "../../Components/admin/DashboardCard";
 
 const Dashboard = () => {
@@ -11,23 +17,22 @@ const Dashboard = () => {
     totalBodegas: 0,
     totalSedes: 0,
     loading: true,
-    error: null
+    error: null,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error('No se encontró token de autenticación');
+          throw new Error("No se encontró token de autenticación");
         }
 
         const headers = {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         };
 
-        // Función auxiliar para hacer fetch con manejo de errores
         const fetchWithAuth = async (url) => {
           const response = await fetch(url, { headers });
           if (!response.ok) {
@@ -36,13 +41,12 @@ const Dashboard = () => {
           return await response.json();
         };
 
-        // Obtener datos en paralelo
         const [payments, users, rents, bodegas, sedes] = await Promise.all([
           fetchWithAuth(`${API_URL}/api/pagos/`),
           fetchWithAuth(`${API_URL}/api/usuarios/`),
           fetchWithAuth(`${API_URL}/api/rentas/`),
           fetchWithAuth(`${API_URL}/api/bodegas/`),
-          fetchWithAuth(`${API_URL}/api/sedes/`)
+          fetchWithAuth(`${API_URL}/api/sedes/`),
         ]);
 
         // Calcular métricas
@@ -59,15 +63,14 @@ const Dashboard = () => {
           totalBodegas,
           totalSedes,
           loading: false,
-          error: null
+          error: null,
         });
-
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-        setStats(prev => ({
+        setStats((prev) => ({
           ...prev,
           loading: false,
-          error: error.message
+          error: error.message,
         }));
       }
     };
@@ -76,43 +79,46 @@ const Dashboard = () => {
   }, []);
 
   if (stats.loading) return <div className="p-6">Cargando datos...</div>;
-  if (stats.error) return <div className="p-6 text-red-500">Error: {stats.error}</div>;
+  if (stats.error)
+    return (
+      <div className="p-10 text-red-500 pt-30 md:pt-30 lg:pt-30">
+        Lo sentimos, ha ocurrido un {stats.error}
+      </div>
+    );
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-6">
-      <DashboardCard 
+      <br />
+      <br />
+      <DashboardCard
         title="Ingresos Totales"
         value={`$${stats.totalIncome.toLocaleString()}`}
         description="Total de pagos recibidos"
         icon={MdAttachMoney}
         onClick={() => console.log("Ingresos Totales Clicked")}
       />
-      
-      <DashboardCard 
+      <DashboardCard
         title="Usuarios Activos"
         value={stats.activeUsers.toLocaleString()}
         description="Usuarios registrados en la plataforma"
         icon={MdPeople}
         onClick={() => console.log("Usuarios Registrados Clicked")}
       />
-
-      <DashboardCard 
+      <DashboardCard
         title="Rentas Activas"
         value={stats.activeRents.toLocaleString()}
         description="Rentas actualmente en el sistema"
         icon={MdShoppingCart}
         onClick={() => console.log("Rentas Activas Clicked")}
       />
-      
-      <DashboardCard 
+      <DashboardCard
         title="Bodegas"
         value={stats.totalBodegas.toLocaleString()}
         description="Bodegas registradas"
         icon={MdStorage}
         onClick={() => console.log("Bodegas Clicked")}
       />
-      
-      <DashboardCard 
+      <DashboardCard
         title="Sedes"
         value={stats.totalSedes.toLocaleString()}
         description="Sedes registradas"

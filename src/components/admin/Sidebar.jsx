@@ -1,18 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { MdDashboard, MdPeople, MdRestaurant, MdOutlineSell, MdSecurity } from "react-icons/md";
+import {
+  MdDashboard,
+  MdPeople,
+  MdRestaurant,
+  MdOutlineSell,
+  MdSecurity,
+} from "react-icons/md";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className={`h-screen  custom-bg  shadow-lg  ${isOpen ? "w-52" : "w-20"} transition-all duration-300 p-4 flex flex-col`}>
+    <div
+      className={`h-screen  custom-bg  shadow-lg  ${
+        isOpen ? "w-52" : "w-20"
+      } transition-all duration-300 p-4 flex flex-col`}
+    >
       <br />
       <br />
       <br />
-      <button 
-        className="btn btn-square btn-ghost b-4 self-end"
+
+      <button
+        className="btn btn-square btn-ghost mb-6 self-end text-3xl"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? "←" : "→"}
@@ -34,7 +45,6 @@ const Sidebar = () => {
             <MdSecurity size={24} /> {isOpen && "Administradores"}
           </Link>
         </li>
-   
       </ul>
     </div>
   );
