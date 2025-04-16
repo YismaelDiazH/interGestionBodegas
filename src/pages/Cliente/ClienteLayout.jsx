@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../../components/admin/Navbar";
-//import { div } from "framer-motion/client";
 import SidebarCliente from "../../components/Wineries/SidebarCliente";
 const ClienteLayout = () => {
   return (

@@ -1,9 +1,7 @@
-// src/layouts/SedesLayout.jsx
 import React from "react";
 import { Outlet } from "react-router-dom";
 import SidebarSede from "../../components/AdminSede/SidebarSede";
 import Navbar from "../../components/admin/Navbar";
-
 
 const SedesLayout = () => {
   return (

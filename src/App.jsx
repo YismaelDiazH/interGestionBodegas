@@ -15,16 +15,13 @@ import MainView from "./components/MainPage/MainView";
 import LoginView from "./components/Login/LoginView";
 import RegistrationView from "./components/Registration/RegistrationView";
 import Password from "./components/Registration/Password";
-import WineriesView from "./components/Wineries/WineriesView";
 
 import "./App.css";
-import PaymentsView from "./components/Registration/PaymentsView";
-import ExpirationView from "./components/Registration/ExpirationView";
 
 function parseJwt(token) {
   try {
     return JSON.parse(atob(token.split(".")[1]));
-  } catch (e) {
+  } catch {
     return null;
   }
 }
