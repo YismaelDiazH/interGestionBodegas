@@ -39,6 +39,7 @@ export default function SedesClienteView() {
 
   const handleVerBodegas = (sedeId) => {
     navigate(`/renta/sedes/${sedeId}/bodegas`);
+
   };
 
   if (loading) {

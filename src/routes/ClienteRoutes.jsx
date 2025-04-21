@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import SedesClienteView from "../components/Wineries/SedesView";
 import BodegasPorSedeView from "../components/Wineries/WineriesView";
 import PaymentsView from "../components/Registration/PaymentsView";
+import PagoExitoso from "../components/Wineries/PagoExitoso";
 
 const ClienteRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const ClienteRoutes = () => {
         <Route path="sedes" element={<SedesClienteView />} />
         <Route path="sedes/:sedeId/bodegas" element={<BodegasPorSedeView />} />
         <Route path="wineries" element={<ExpirationView />} />
+        <Route path="pago-exitoso" element={<PagoExitoso/>} />
         <Route path="paymentsView" element={<PaymentsView />} />
 
         {/*

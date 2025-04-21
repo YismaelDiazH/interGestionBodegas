@@ -31,21 +31,10 @@ const SidebarCliente = () => {
         <li>
           <Link to="/renta/sedes" className="flex items-center gap-2">
             <MdWarehouse size={24} /> {isOpen && "Sedes"}{" "}
-            {/* Corregido el nombre del componente */}
+           
           </Link>
         </li>
-        <li>
-          <Link to="/renta/paymentsView" className="flex items-center gap-2">
-            <ImClipboard size={24} /> {isOpen && "Pagos"}{" "}
-            {/* Corregido el texto (quitado ":") */}
-          </Link>
-        </li>
-        <li>
-          <Link to="/sedes/bodega" className="flex items-center gap-2">
-            <MdPeople size={24} /> {isOpen && "Usuarios"}{" "}
-            {/* Cambiado "Pagos" por "Usuarios" ya que usas MdPeople */}
-          </Link>
-        </li>
+       
       </ul>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import cop from "./img/cop.jpg";
+import CheckoutButton from "./CheckoutButton";
 
 export default function BodegasPorSedeView() {
   const [bodegas, setBodegas] = useState([]);
@@ -11,6 +12,7 @@ export default function BodegasPorSedeView() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  localStorage.setItem("bodegaId", bodegas.id);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -138,12 +140,7 @@ export default function BodegasPorSedeView() {
                   </p>
                 )}
 
-                <button
-                  onClick={() => handleRentar(bodega.id)}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300"
-                >
-                  Rentar Bodega
-                </button>
+<CheckoutButton bodegaId={bodega.id} />
               </div>
             </div>
           ))}

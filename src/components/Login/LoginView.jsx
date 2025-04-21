@@ -66,6 +66,7 @@ export default function LoginView() {
       const role = payload?.role;
       localStorage.setItem("user", JSON.stringify(payload));
 
+
       switch (role) {
         case "SUPERADMINISTRADOR":
           window.location.href = "/admin/";
