@@ -10,8 +10,6 @@ const CheckoutButton = ({ bodegaId }) => {
       const token = localStorage.getItem('token');
       const user = JSON.parse(localStorage.getItem('user'));
 const userId = user ? user.id : null;
-console.log('Cliente ID:', userId);
-      console.log('Cliente ID:', userId);
       
       // 1. Crear sesión de Checkout en el backend
       const response = await fetch('http://localhost:8080/api/checkout/create-session', {

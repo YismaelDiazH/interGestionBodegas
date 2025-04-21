@@ -33,9 +33,10 @@ const PagoExitoso = () => {
             "Authorization": `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
+            bodegaId: session.bodega_id,
+            clienteId: session.cliente_id,
             sessionId: sessionId,
             monto: session.amount_total / 100,
-            paymentIntentId: session.payment_intent,
             paymentStatus: session.payment_status
           })
         });
