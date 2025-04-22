@@ -31,10 +31,8 @@ const SidebarCliente = () => {
         <li>
           <Link to="/renta/sedes" className="flex items-center gap-2">
             <MdWarehouse size={24} /> {isOpen && "Sedes"}{" "}
-           
           </Link>
         </li>
-       
       </ul>
     </div>
   );
