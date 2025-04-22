@@ -55,7 +55,7 @@ const userId = user ? user.id : null;
   return (
     <button 
       onClick={handleCheckout}
-      className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300"
+      className="w-full custom-bg  text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300"
     >
       Rentar con Stripe
     </button>

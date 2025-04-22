@@ -123,7 +123,7 @@ export default function BodegasPorSedeView() {
                 </div>
 
                 <div className="mb-6">
-                  <p className="text-3xl font-bold text-orange-600 mb-2">
+                  <p className="text-3xl font-bold custom-bg mb-2">
                     ${bodega.precio?.toLocaleString() || "0"} MXN
                   </p>
                   <p className="text-gray-600 mb-1">
