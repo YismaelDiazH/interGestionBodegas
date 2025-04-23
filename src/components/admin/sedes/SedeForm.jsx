@@ -152,7 +152,7 @@ const SedeForm = ({ sedes, usuarios }) => {
           );
           setFormData({ ...formData, administradores: selected });
         }}
-        className="w-full h-40 border rounded p-2 appearance-none bg-white [&>option:nth-child(odd)]:bg-gray-300"
+        className="w-full h-45 border rounded p-2 appearance-none bg-white [&>option:nth-child(odd)]:bg-gray-200"
       >
         {administradores.map((admin) => (
           <option

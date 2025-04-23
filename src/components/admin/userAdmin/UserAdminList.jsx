@@ -15,7 +15,7 @@ const UserAdminList = ({ users, onDelete }) => {
   );
 
   return (
-    <div className="rounded-box border border-base-content/5 bg-base-100 p-4">
+    <div className="rounded-box border border-base-content/5 bg-base-100 p-3 shadow-md ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Lista de Administradores</h2>
         <div className="relative ">
@@ -56,17 +56,17 @@ const UserAdminList = ({ users, onDelete }) => {
       >
         <table className="table w-full">
           <thead>
-            <tr className="bg-base-200 sticky top-0">
+            <tr className="bg-base-200 sticky top-0 w-[full] z-10">
               <th>#</th>
               <th>Nombre</th>
-              <th>Apellido paterno</th>
-              <th>Apellido materno</th>
+              <th>Ap. paterno</th>
+              <th>Ap. materno</th>
               <th>Correo</th>
               <th>Teléfono</th>
               <th>RFC</th>
               <th>Dirección</th>
               <th>Código Postal</th>
-              <th>Acciones</th>
+              <th>Actualizar</th>
             </tr>
           </thead>
           <tbody>
@@ -83,20 +83,30 @@ const UserAdminList = ({ users, onDelete }) => {
                   <td>{user.direccion}</td>
                   <td>{user.codigopos}</td>
                   <td>
-                    <button
-                      className="btn btn-sm btn-outline btn-primary mr-2"
-                      onClick={() =>
-                        navigate(`/admin/administradores/edit/${user.id}`)
-                      }
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn btn-sm btn-outline btn-error"
-                      onClick={() => onDelete(user.id)}
-                    >
-                      Eliminar
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        className="btn btn-sm custom-bg text-white hover:bg-[#a77d4e] transition-colors"
+                        onClick={() =>
+                          navigate(`/admin/administradores/edit/${user.id}`)
+                        }
+                      >
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/1827/1827933.png"
+                          alt="Editar"
+                          className="h-4 w-4"
+                        />
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline btn-error"
+                        onClick={() => onDelete(user.id)}
+                      >
+                        <img
+                          src="https://cdn4.iconfinder.com/data/icons/social-messaging-ui-coloricon-1/21/39-512.png"
+                          alt="Eliminar"
+                          className="h-3 w-3"
+                        />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

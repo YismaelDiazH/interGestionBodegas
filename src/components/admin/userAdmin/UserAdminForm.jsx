@@ -91,7 +91,7 @@ const UserAdminForm = () => {
   if (error) return <p className="p-6 text-red-500">{error}</p>;
 
   return (
-    <div className="px-4 py-6">
+    <div className="px-4 py-6 mt-[30px]">
       <form
         onSubmit={handleSubmit}
         className="bg-base-100 p-6 sm:p-10 rounded-lg shadow-md max-w-3xl w-full mx-auto"
