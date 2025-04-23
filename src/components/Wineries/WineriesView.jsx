@@ -87,7 +87,7 @@ export default function BodegasPorSedeView() {
       }}
     >
       <div className="text-center mb-8 bg-white p-4 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-orange-600">
+        <h1 className="text-3xl font-bold text-black-600">
           Bodegas Disponibles
         </h1>
         {sedeInfo && (
@@ -102,7 +102,7 @@ export default function BodegasPorSedeView() {
           <p className="text-xl text-gray-700">No hay bodegas disponibles en esta sede</p>
           <button 
             onClick={() => navigate(-1)}
-            className="mt-4 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+            className="mt-4 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Volver a sedes
           </button>
@@ -117,7 +117,13 @@ export default function BodegasPorSedeView() {
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <h2 className="text-2xl font-bold text-gray-800">{bodega.nombre || `Bodega ${bodega.folio}`}</h2>
-                  <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full uppercase font-semibold">
+                  <span 
+                    className={`inline-block text-xs px-2 py-1 rounded-full uppercase font-semibold ${
+                      bodega.status !== "Vacante" 
+                        ? "bg-red-100 text-red-800" 
+                        : "bg-green-100 text-green-800"
+                    }`}
+                  >
                     {bodega.status || "Disponible"}
                   </span>
                 </div>
@@ -140,7 +146,7 @@ export default function BodegasPorSedeView() {
                   </p>
                 )}
 
-<CheckoutButton bodegaId={bodega.id} />
+                {bodega.status === "Vacante" && <CheckoutButton bodegaId={bodega.id} />}
               </div>
             </div>
           ))}

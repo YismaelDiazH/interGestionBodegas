@@ -8,11 +8,13 @@ import SedesClienteView from "../components/Wineries/SedesView";
 import BodegasPorSedeView from "../components/Wineries/WineriesView";
 import PaymentsView from "../components/Registration/PaymentsView";
 import PagoExitoso from "../components/Wineries/PagoExitoso";
+import DashboardCliente from "../pages/Cliente/DashboardCliente";
 
 const ClienteRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<ClienteLayout />}>
+        <Route path="" element={<DashboardCliente />} />
         <Route path="bodegas" element={<WineriesView />} />
         <Route path="sedes" element={<SedesClienteView />} />
         <Route path="sedes/:sedeId/bodegas" element={<BodegasPorSedeView />} />

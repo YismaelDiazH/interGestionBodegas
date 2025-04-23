@@ -19,7 +19,7 @@ export default function Navbar() {
 
   const goToDashboardSuper = () => navigate("/admin/");
   const goToDashboardAdmin = () => navigate("/sedes/");
-  const goToRentar = () => navigate("/rentar");
+  const goToRentar = () => navigate("/renta/sedes");
   const goToLogin = () => navigate("/login");
   const goToRegister = () => navigate("/register");
 

@@ -29,11 +29,7 @@ const SidebarSede = () => {
             <MdWarehouse size={24} /> {isOpen && "Bodegas"}
           </Link>
         </li>
-        <li>
-          <Link to="/sedes/clientes" className="flex items-center gap-2">
-            <MdPeople size={24} /> {isOpen && "Clientes"}
-          </Link>
-        </li>
+       
       </ul>
     </div>
   );

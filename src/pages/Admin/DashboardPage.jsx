@@ -87,9 +87,14 @@ const Dashboard = () => {
     );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-6">
-      <br />
-      <br />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 p-6 mt-20">
+     <DashboardCard
+        title="Sedes"
+        value={stats.totalSedes.toLocaleString()}
+        description="Sedes registradas"
+        icon={MdBusiness}
+        onClick={() => console.log("Sedes Clicked")}
+      />
       <DashboardCard
         title="Ingresos Totales"
         value={`$${stats.totalIncome.toLocaleString()}`}
@@ -118,13 +123,7 @@ const Dashboard = () => {
         icon={MdStorage}
         onClick={() => console.log("Bodegas Clicked")}
       />
-      <DashboardCard
-        title="Sedes"
-        value={stats.totalSedes.toLocaleString()}
-        description="Sedes registradas"
-        icon={MdBusiness}
-        onClick={() => console.log("Sedes Clicked")}
-      />
+    
     </div>
   );
 };

@@ -2,15 +2,14 @@ import React from "react";
 
 const DashboardCard = ({ title, value, description, icon: Icon, onClick }) => {
   return (
-    <div className="card w-96 bg-base-100 card-lg shadow-md p-4 hover:shadow-lg transition duration-300">
-      <div className="card-body flex flex-col items-center text-center">
-        {Icon && <Icon className="text-4xl text-warm" />}
-        <h2 className="card-title text-xl">{title}</h2>
-        <p className="text-2xl font-bold">{value}</p>
-        <p className="text-gray-500">{description}</p>
-        
-      </div>
+    <div className="w-full sm:w-40 md:w-48 lg:w-56 bg-white rounded-lg shadow-sm p-3 hover:shadow-md transition duration-300">
+    <div className="flex flex-col items-center text-center h-full">
+      {Icon && <Icon className="text-3xl md:text-4xl text-blue-500 mb-2" />}
+      <h2 className="text-sm md:text-base font-semibold">{title}</h2>
+      <p className="text-xl md:text-2xl font-bold my-1">{value}</p>
+      <p className="text-xs md:text-sm text-gray-500 mt-auto">{description}</p>
     </div>
+  </div>
   );
 };
 

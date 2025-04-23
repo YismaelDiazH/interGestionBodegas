@@ -61,7 +61,7 @@ const BodegaPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 mt-20">
       <h1 className="text-2xl font-bold mb-4">Bodegas</h1>
 
       <button

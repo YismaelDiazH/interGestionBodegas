@@ -79,7 +79,7 @@ const BodegaForm = () => {
   };
   
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-6 max-w-xl mx-auto mt-20">
       <h2 className="text-xl font-bold mb-4">
         {id ? "Editar Bodega" : "Agregar Nueva Bodega"}
       </h2>
