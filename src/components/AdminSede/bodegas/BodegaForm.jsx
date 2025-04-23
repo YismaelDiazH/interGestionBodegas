@@ -49,7 +49,7 @@ const BodegaForm = () => {
     // Asegura que incluimos el id de la sede si es nuevo
     const bodegaAEnviar = {
       ...bodega,
-      sede: id ? bodega.sede : { id: sedeId, nombre: sedeName },
+      sede: { id: sedeId }
     };
 
     const method = id ? "PUT" : "POST";
