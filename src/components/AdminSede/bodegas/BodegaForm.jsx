@@ -17,16 +17,16 @@ const BodegaForm = () => {
 
   const token = localStorage.getItem("token");
   const sedeId = localStorage.getItem("sedeId");
-    const sedeName = localStorage.getItem("sedeName");
+  const sedeName = localStorage.getItem("sedeName");
 
   useEffect(() => {
     if (id) {
       setLoading(true);
       fetch(`http://localhost:8080/api/bodegas/id/${id}`, {
         headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
         .then((res) => {
           if (!res.ok) throw new Error("Error al obtener la bodega");
@@ -45,20 +45,18 @@ const BodegaForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Asegura que incluimos el id de la sede si es nuevo
     const bodegaAEnviar = {
       ...bodega,
       sede: id ? bodega.sede : { id: sedeId, nombre: sedeName },
-        
-
     };
-  
+
     const method = id ? "PUT" : "POST";
     const url = id
       ? `http://localhost:8080/api/bodegas/${id}`
       : "http://localhost:8080/api/bodegas/";
-  
+
     fetch(url, {
       method,
       headers: {
@@ -77,7 +75,7 @@ const BodegaForm = () => {
         setError(err.message);
       });
   };
-  
+
   return (
     <div className="p-6 max-w-xl mx-auto mt-20">
       <h2 className="text-xl font-bold mb-4">
@@ -145,7 +143,6 @@ const BodegaForm = () => {
               className="btn btn-secondary"
               onClick={() => navigate("/sedes/bodegas")}
             >
-                 
               Cancelar
             </button>
           </div>

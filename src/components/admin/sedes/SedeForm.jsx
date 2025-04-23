@@ -45,14 +45,14 @@ const SedeForm = ({ sedes, usuarios }) => {
     try {
       const token = localStorage.getItem("token"); // o desde contexto
 
-const response = await fetch(url, {
-  method,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`, // <--- Aquí el token
-  },
-  body: JSON.stringify(formData),
-});
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // <--- Aquí el token
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error("Error al guardar la sede");
@@ -68,9 +68,9 @@ const response = await fetch(url, {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 bg-base-100 rounded-lg shadow-md"
+      className="p-6 bg-base-100 rounded-lg shadow-md mt-[80px]"
     >
-      <h2 className="text-xl font-bold mb-4">
+      <h2 class="text-xl font-bold mb-4 mt-[2px]">
         {isEditing ? "Editar Sede" : "Nueva Sede"}
       </h2>
 
@@ -152,17 +152,19 @@ const response = await fetch(url, {
           );
           setFormData({ ...formData, administradores: selected });
         }}
-        className="w-full h-40 border rounded p-2 appearance-none bg-white"
-
+        className="w-full h-40 border rounded p-2 appearance-none bg-white [&>option:nth-child(odd)]:bg-gray-300"
       >
         {administradores.map((admin) => (
-          <option key={admin.id} value={admin.id}>
+          <option
+            key={admin.id}
+            value={admin.id}
+            className="hover:bg-blue-50 pl-[20px]" // Opcional: color al hacer hover
+          >
             {admin.nombre}
           </option>
         ))}
       </select>
-
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-gray-900 mt-[25px] mb-[25px]">
         Usa Ctrl (Windows) o Cmd (Mac) para seleccionar varios.
       </p>
 

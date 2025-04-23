@@ -15,6 +15,7 @@ const UserAdminForm = () => {
     rfc: "",
     direccion: "",
     codigopos: "",
+    password: "",
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -40,6 +41,7 @@ const UserAdminForm = () => {
             rfc: data.rfc || "",
             direccion: data.direccion || "",
             codigopos: data.codigopos || "",
+            contrasena: data.password || "",
           });
         } catch (err) {
           console.error("Error cargando el usuario:", err);
@@ -130,7 +132,10 @@ const UserAdminForm = () => {
               type: "tel",
               label: "Teléfono",
               pattern: "\\d{10}",
-              hint: "Debe tener 10 dígitos.",
+              hint: "10 dígitos (solo números)",
+              inputProps: {
+                inputMode: "numeric",
+              },
             },
             {
               name: "rfc",
@@ -149,6 +154,17 @@ const UserAdminForm = () => {
               label: "Código Postal",
               pattern: "\\d{5}",
               hint: "Debe tener 5 dígitos.",
+            },
+            {
+              name: "password",
+              label: "Contraseña",
+              pattern:
+                "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+              hint: "Debe contener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales (@$!%*?&).",
+              inputProps: {
+                type: "password",
+                autoComplete: "new-password",
+              },
             },
           ].map(({ name, label, pattern, hint, type = "text" }) => (
             <div key={name}>
