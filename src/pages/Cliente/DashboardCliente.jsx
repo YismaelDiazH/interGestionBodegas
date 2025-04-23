@@ -73,7 +73,7 @@ const DashboardCliente = () => {
   }
 
   return (
-    <div className="p-6 ml-40 mt-10">
+    <div className="p-6 ml-44 mt-10 w-auto">
       <h1 className="text-2xl font-bold mb-6">Mis Bodegas Rentadas</h1>
       
       {/* Tarjetas de métricas */}
@@ -161,7 +161,6 @@ const DashboardCliente = () => {
                 <tr 
                   key={renta.id} 
                   className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => navigate(`/renta/detalle/${renta.id}`)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">

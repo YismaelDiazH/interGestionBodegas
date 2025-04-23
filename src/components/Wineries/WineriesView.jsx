@@ -78,7 +78,7 @@ export default function BodegasPorSedeView() {
 
   return (
     <div
-      className="min-h-screen w-full flex flex-col items-center py-10 relative"
+      className="min-h-screen w-auto flex flex-col items-center py-10 relative"
       style={{
         backgroundImage: `url(${cop})`,
         backgroundSize: "cover",
@@ -86,7 +86,7 @@ export default function BodegasPorSedeView() {
         backgroundAttachment: "fixed"
       }}
     >
-      <div className="text-center mb-8 bg-white p-4 rounded-lg shadow-md">
+      <div className="text-center mb-8  bg-white p-4 rounded-lg shadow-md">
         <h1 className="text-3xl font-bold text-black-600">
           Bodegas Disponibles
         </h1>
@@ -108,7 +108,7 @@ export default function BodegasPorSedeView() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 w-full max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 w-auto max-w-6xl">
           {bodegas.map((bodega) => (
             <div
               key={bodega.id}
@@ -119,7 +119,7 @@ export default function BodegasPorSedeView() {
                   <h2 className="text-2xl font-bold text-gray-800">{bodega.nombre || `Bodega ${bodega.folio}`}</h2>
                   <span 
                     className={`inline-block text-xs px-2 py-1 rounded-full uppercase font-semibold ${
-                      bodega.status !== "Vacante" 
+                      bodega.status !== "VACANTE" 
                         ? "bg-red-100 text-red-800" 
                         : "bg-green-100 text-green-800"
                     }`}
@@ -146,7 +146,7 @@ export default function BodegasPorSedeView() {
                   </p>
                 )}
 
-                {bodega.status === "Vacante" && <CheckoutButton bodegaId={bodega.id} />}
+                {bodega.status === "VACANTE" && <CheckoutButton bodegaId={bodega.id} />}
               </div>
             </div>
           ))}

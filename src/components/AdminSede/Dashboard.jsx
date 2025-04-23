@@ -23,6 +23,7 @@ const DashboardSede = () => {
         if (!responseSede.ok) throw new Error("Error al obtener sede");
         
         const sede = await responseSede.json();
+        localStorage.setItem('sedeId', sede.id);
         setNombreSede(sede.nombre);
 
         // 2. Obtener todas las bodegas (como en tu BodegaPage)
