@@ -138,14 +138,7 @@ export default function LoginView() {
                 </button>
               </form>
 
-              <div className="text-center mb-6">
-                <a
-                  href="/lost-password"
-                  className="text-sm text-gray-600 hover:underline hover:text-black"
-                >
-                  ¿Has olvidado la contraseña?
-                </a>
-              </div>
+              
             </div>
 
             <div className="bg-white rounded-md p-4 mt-4 w-full max-w-sm text-center shadow-sm text-sm text-gray-600">

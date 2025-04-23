@@ -63,7 +63,7 @@ const DashboardSede = () => {
   if (error) {
     return (
       <div className="p-8 text-center text-red-500">
-        Error: {error}
+        Error: No se completó la tarea"
       </div>
     );
   }

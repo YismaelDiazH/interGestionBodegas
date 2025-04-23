@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdStorage, MdAttachMoney, MdCalendarToday, MdWarning } from "react-icons/md";
-
+import RenovacionBodega from "../../components/Wineries/RenovacionBodega";
 const DashboardCliente = () => {
   const [rentas, setRentas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -134,6 +134,7 @@ const DashboardCliente = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Inicio</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Fin</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -145,6 +146,7 @@ const DashboardCliente = () => {
               
               let estado = "";
               let estadoClass = "";
+              let estaVencida = diffDays <= 0;
               
               if (diffDays <= 0) {
                 estado = "Vencida";
@@ -189,6 +191,15 @@ const DashboardCliente = () => {
                       {estado}
                     </span>
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+          {estaVencida && (
+            <RenovacionBodega 
+              rentaId={renta.id} 
+              bodegaId={renta.bodega?.id}
+              precio={renta.bodega?.precio}
+            />
+          )}
+        </td>
                 </tr>
               );
             })}
@@ -198,12 +209,7 @@ const DashboardCliente = () => {
         {rentas.length === 0 && (
           <div className="text-center py-8">
             <p className="text-gray-500">No tienes bodegas rentadas actualmente</p>
-            <button 
-              onClick={() => navigate('/renta/nueva')}
-              className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Rentar una bodega
-            </button>
+            
           </div>
         )}
       </div>
